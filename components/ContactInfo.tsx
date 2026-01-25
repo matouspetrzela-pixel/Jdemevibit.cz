@@ -38,9 +38,6 @@ export function ContactInfo() {
   if (!isClient) {
     return (
       <section id="kontakt" className="container mx-auto px-4 py-16">
-        <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 text-center">
-          Kontakt
-        </h2>
         <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
           {linkedInUrl && (
             <a
@@ -59,9 +56,6 @@ export function ContactInfo() {
 
   return (
     <section id="kontakt" className="container mx-auto px-4 py-16">
-      <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 text-center">
-        Kontakt
-      </h2>
       <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
         {email && (
           <a

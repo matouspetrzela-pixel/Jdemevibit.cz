@@ -1,4 +1,5 @@
 import { generatePageMetadata } from "@/app/seo/generateMetadata";
+import { BackButton } from "@/components/BackButton";
 
 export const metadata = generatePageMetadata({
   title: "O mně",
@@ -9,6 +10,7 @@ export const metadata = generatePageMetadata({
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-[#0f1217]">
+      <BackButton />
       <article className="container mx-auto px-4 py-16 max-w-4xl">
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-8">
           O mně

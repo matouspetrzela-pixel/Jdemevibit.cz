@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export function Header() {
   return (
-    <header className="w-full border-b border-primary-gray/20">
+    <header className="w-full border-b border-white/10">
       <div className="container mx-auto px-4 py-4">
         {/* Navigační lišta */}
         <nav className="flex justify-center md:justify-end" aria-label="Hlavní navigace">

@@ -1,5 +1,6 @@
 import { generatePageMetadata } from "@/app/seo/generateMetadata";
 import { UseCasesSection } from "@/components/UseCasesSection";
+import { BackButton } from "@/components/BackButton";
 
 export const metadata = generatePageMetadata({
   title: "Use Cases",
@@ -10,6 +11,7 @@ export const metadata = generatePageMetadata({
 export default function UseCasesPage() {
   return (
     <div className="min-h-screen bg-[#0f1217]">
+      <BackButton />
       <UseCasesSection />
     </div>
   );
