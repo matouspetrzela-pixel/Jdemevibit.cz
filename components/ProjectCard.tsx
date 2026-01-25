@@ -1,64 +1,92 @@
+"use client";
+
 import { Project } from "@/lib/projects";
-import Link from "next/link";
+import Image from "next/image";
 
 interface ProjectCardProps {
   project: Project;
+  onClick: () => void;
 }
 
-export function ProjectCard({ project }: ProjectCardProps) {
+export function ProjectCard({ project, onClick }: ProjectCardProps) {
   return (
-    <article className="bg-white/5 border border-white/10 rounded-lg p-6 hover:bg-white/10 transition-colors">
-      <div className="mb-4">
-        <span
-          className={`inline-block px-3 py-1 rounded text-xs font-semibold ${
-            project.category === "WEB"
-              ? "bg-[#7b3beb]/20 text-[#7b3beb]"
-              : "bg-[#ef2c28]/20 text-[#ef2c28]"
-          }`}
-        >
-          {project.category}
-        </span>
-        {project.status === "PROTOTYP" && (
-          <span className="ml-2 inline-block px-3 py-1 rounded text-xs font-semibold bg-[#ef2c28]/20 text-[#ef2c28]">
-            PROTOTYP
-          </span>
+    <article
+      onClick={onClick}
+      className="bg-white/5 border border-white/10 rounded-lg overflow-hidden hover:bg-white/10 transition-colors cursor-pointer h-full flex flex-col"
+    >
+      {/* Grafický náhled nahoře */}
+      <div className="relative w-full h-48 bg-white/5">
+        {project.image ? (
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-white/30 text-sm">
+            Náhled
+          </div>
         )}
-      </div>
-
-      <h3 className="text-xl font-bold text-white mb-2">{project.title}</h3>
-      <p className="text-white/70 text-sm mb-4 line-clamp-3">
-        {project.description}
-      </p>
-
-      <div className="flex flex-wrap gap-2 mb-4">
-        {project.technologies.map((tech) => (
+        {/* Badge s typem vpravo nahoře */}
+        <div className="absolute top-3 right-3">
           <span
-            key={tech}
-            className="px-2 py-1 bg-white/10 rounded text-xs text-white/80"
+            className={`inline-block px-3 py-1 rounded text-xs font-semibold ${
+              project.category === "WEB"
+                ? "bg-[#7b3beb]/20 text-[#7b3beb]"
+                : "bg-[#ef2c28]/20 text-[#ef2c28]"
+            }`}
           >
-            {tech}
+            {project.category}
           </span>
-        ))}
+        </div>
       </div>
 
-      <div className="flex items-center justify-between text-sm text-white/60 mb-4">
-        <span>Čas: {project.timeSpent}</span>
-        {project.status === "Veřejný" && (
-          <span className="text-green-400">Veřejný</span>
-        )}
-      </div>
+      {/* Obsah karty */}
+      <div className="p-4 flex flex-col flex-1">
+        {/* Název projektu */}
+        <h3 className="text-lg font-bold text-white mb-2">{project.title}</h3>
 
-      {project.url && (
-        <Link
-          href={project.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-[#ef2c28] hover:text-[#ff3d35] transition-colors font-medium"
-        >
+        {/* Popis - zkrácený */}
+        <p className="text-white/70 text-sm mb-4 line-clamp-3 flex-1">
+          {project.description}
+        </p>
+
+        {/* Technologie - tagy */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {project.technologies.slice(0, 3).map((tech) => (
+            <span
+              key={tech}
+              className="px-2 py-1 bg-white/10 rounded text-xs text-white/80"
+            >
+              {tech}
+            </span>
+          ))}
+          {project.technologies.length > 3 && (
+            <span className="px-2 py-1 bg-white/10 rounded text-xs text-white/60">
+              +{project.technologies.length - 3}
+            </span>
+          )}
+        </div>
+
+        {/* Čas a Status */}
+        <div className="flex items-center justify-between text-xs text-white/60 mb-4">
+          <span>{project.timeSpent}</span>
+          {project.status === "Veřejný" && (
+            <span className="text-green-400">Veřejný</span>
+          )}
+          {project.status === "PROTOTYP" && (
+            <span className="text-[#ef2c28]">PROTOTYP</span>
+          )}
+        </div>
+
+        {/* Tlačítko Otevřít */}
+        <button className="text-[#ef2c28] hover:text-[#ff3d35] transition-colors font-medium text-sm text-left inline-flex items-center gap-2">
           Otevřít
           <span>→</span>
-        </Link>
-      )}
+        </button>
+      </div>
     </article>
   );
 }

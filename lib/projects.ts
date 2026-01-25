@@ -5,11 +5,13 @@ export interface Project {
   title: string;
   category: "WEB" | "PROTOTYPE";
   description: string;
+  fullDescription?: string; // Celý popis pro modal detail
   technologies: string[];
   timeSpent: string;
   status: "Veřejný" | "PROTOTYP";
   url?: string;
-  image?: string;
+  image?: string; // Cesta k screenshotu
+  businessBenefit?: string; // Business přínos projektu
 }
 
 export const projects: Project[] = [

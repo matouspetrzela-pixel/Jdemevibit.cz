@@ -2,7 +2,7 @@ import { generatePageMetadata } from "@/app/seo/generateMetadata";
 
 export const metadata = generatePageMetadata({
   title: "O mně",
-  description: "Praktikující vývojář zaměřený na vibe coding, AI programování a learning in public. Stavím projekty s AI nástroji a dokumentuji proces.",
+  description: "Osobní příběh o začátku s AI v roce 2024, objevu vibe coding a vzniku Jdemevibit. Autentický přístup k tvoření s AI nástroji a learning in public.",
   path: "/o-mne",
 });
 
@@ -14,49 +14,32 @@ export default function AboutPage() {
           O mně
         </h1>
 
-        <div className="text-white/80 space-y-6">
-          <section>
-            <h2 className="text-2xl font-semibold text-white mb-4">
-              Kdo jsem
-            </h2>
-            <p>
-              Jsem praktikující vývojář, který se zaměřuje na vibe coding a AI programování. 
-              Místo teorie stavím reálné projekty a dokumentuji celý proces - včetně chyb a iterací.
-            </p>
-          </section>
+        <div className="text-white/80 space-y-6 leading-relaxed text-lg">
+          <p>
+            Nevěřím na zkratky. Věřím na první krok.
+          </p>
 
-          <section>
-            <h2 className="text-2xl font-semibold text-white mb-4">
-              Co dělám
-            </h2>
-            <p>
-              Vytvářím projekty pomocí AI nástrojů jako Claude a Cursor. Každý projekt má 
-              dokumentovaný čas vývoje, použité nástroje a konkrétní výsledky. Žádné vágní sliby, 
-              jen reálná data.
-            </p>
-          </section>
+          <p>
+            S AI jsem začal na konci roku 2024. Ne kvůli trendům, ale proto, že jsem cítil změnu v tom, jak přemýšlíme, tvoříme a pracujeme. Nejsem technik ani programátor, ale jako člověk, který chtěl dělat věci chytřeji a smysluplněji.
+          </p>
 
-          <section>
-            <h2 className="text-2xl font-semibold text-white mb-4">
-              Proč learning in public
-            </h2>
-            <p>
-              Veřejná dokumentace procesu vytváření projektů s AI má několik výhod: transparentnost, 
-              učení pro ostatní, důvěryhodnost a budování komunity. Sdílení zkušeností pomáhá všem růst.
-            </p>
-          </section>
+          <p>
+            Učím se nahlas. Zkouším, dělám chyby, sdílím co funguje i co ne. 
+            Protože nejlepší způsob, jak pochopit AI, je používat ji v praxi, ne jen o ní mluvit. 
+            Vzdělávám lidi kolem sebe, stavím nástroje, hledám kde AI opravdu pomáhá.
+          </p>
 
-          <section>
-            <h2 className="text-2xl font-semibold text-white mb-4">
-              E-E-A-T principy
-            </h2>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li><strong>Expertise:</strong> Praktické zkušenosti s AI nástroji a vývojem</li>
-              <li><strong>Experience:</strong> Reálné projekty s dokumentovanými procesy</li>
-              <li><strong>Authoritativeness:</strong> Veřejná dokumentace a transparentnost</li>
-              <li><strong>Trustworthiness:</strong> Žádné marketingové sliby, jen fakta</li>
-            </ul>
-          </section>
+          <p>
+            Koncem roku 2025 jsem objevil vibe coding. Flow, hravost a pocit, že technologie přestává brzdit a začíná vést. Tvoření, kde se potkává kreativita s logikou, odvaha s intuicí. Najednou jsem stavěl věci, o kterých jsem dřív jen přemýšlel.
+          </p>
+
+          <p>
+            Jdemevibit vzniklo z téhle cesty. Není to o dokonalosti ani o slibech, že AI vyřeší všechno. Je to o odvaze začít, zkoušet a jít dál. O tom, že nástroje jsou tady pro lidi, ne naopak.
+          </p>
+
+          <p>
+            Pokud chceš tvořit jinak a zůstat přitom člověkem – jdeme na to, jdemevibit.
+          </p>
         </div>
       </article>
     </div>

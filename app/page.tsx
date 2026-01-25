@@ -18,15 +18,15 @@ export default function Home() {
       <main>
         {/* Hero sekce */}
         <section className="flex items-center justify-center min-h-[calc(100vh-80px)] px-4">
-          <div className="text-center max-w-4xl">
+          <div className="text-center max-w-4xl -mt-[20%]">
             {/* H1: Jdemevibit */}
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tight mb-6 md:mb-8">
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tight mb-4 md:mb-6">
               <span className="text-[#ffffff]">Jdeme</span>
               <span className="text-[#ef2c28] text-[1.1em]">vibit</span>
             </h1>
 
             {/* H2 / Claim: Vibe coding projekty. Autenticky. Z praxe. */}
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-medium text-[#ffffff] opacity-90 leading-relaxed mb-8 md:mb-10">
+            <h2 className="text-lg md:text-xl lg:text-2xl font-medium text-[#ffffff] opacity-90 leading-relaxed">
               Vibe coding projekty.
               <br />
               Autenticky. Z praxe.
@@ -35,48 +35,13 @@ export default function Home() {
             {/* CTA: Prozkoumat use cases */}
             <div className="mt-8">
               <Link
-                href="#use-cases"
+                href="/use-cases"
                 className="text-[#ffffff] text-lg md:text-xl inline-flex items-center gap-2 transition-all opacity-90 hover:opacity-100 border-b border-[#ef2c28] border-opacity-60 hover:border-opacity-100"
               >
                 Prozkoumat use cases
                 <span className="text-[#ef2c28]">→</span>
               </Link>
             </div>
-          </div>
-        </section>
-
-        {/* Manifesto sekce */}
-        <section className="container mx-auto px-4 py-16 md:py-24 max-w-3xl">
-          <div className="text-[#ffffff] text-lg md:text-xl leading-relaxed space-y-6">
-            <p>
-              Tvořím s AI. Učím se veřejně. Sdílím reálný proces.
-            </p>
-            <p>
-              Bez pozlátka. Bez „já jsem expert".
-              <br />
-              Jen konkrétní projekty, funkční výstupy
-              <br />
-              a i slepé uličky po cestě.
-            </p>
-            <p>
-              Pokud s vibe codingem začínáš
-              <br />
-              nebo hledáš inspiraci z praxe,
-              <br />
-              jsi tady správně.
-            </p>
-          </div>
-        </section>
-
-        {/* Use Cases sekce */}
-        <section id="use-cases" className="container mx-auto px-4 py-16 md:py-24">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#ffffff] mb-12 text-center">
-            Use Cases
-          </h2>
-          <div className="max-w-4xl mx-auto">
-            <p className="text-[#ffffff] opacity-80 text-center text-lg">
-              Projekty budou přidány brzy...
-            </p>
           </div>
         </section>
 
