@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 
-const FORMSPREE_CONFIGURED = Boolean(process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID);
+const FORMSPREE_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID || "xkovrywy";
+const FORMSPREE_CONFIGURED = Boolean(FORMSPREE_FORM_ID);
 const SUBMIT_URL = "/api/contact";
 
 const LINKEDIN_URL = process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://www.linkedin.com/in/matouš-petržela";

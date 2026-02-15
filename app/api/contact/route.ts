@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const FORMSPREE_ID = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID;
-const FORMSPREE_URL = FORMSPREE_ID
-  ? `https://formspree.io/f/${FORMSPREE_ID}`
-  : null;
+const FORMSPREE_ID = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID || "xkovrywy";
+const FORMSPREE_URL = `https://formspree.io/f/${FORMSPREE_ID}`;
 
 export async function POST(request: NextRequest) {
   if (!FORMSPREE_URL) {
