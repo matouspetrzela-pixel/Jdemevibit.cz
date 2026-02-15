@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const FORMSPREE_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID || "xkovrywy";
 const FORMSPREE_CONFIGURED = Boolean(FORMSPREE_FORM_ID);
@@ -10,6 +10,8 @@ const LINKEDIN_URL = process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://www.linked
 
 export function ContactForm() {
   const [formStatus, setFormStatus] = useState("");
+  const [sending, setSending] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
   if (!FORMSPREE_CONFIGURED) {
     return (
@@ -36,7 +38,7 @@ export function ContactForm() {
   }
 
   return (
-    <section id="kontakt-formular" className="container mx-auto px-4 py-8 max-w-xl text-center">
+    <section id="kontakt-formular" className="container mx-auto px-4 py-8 pb-24 max-w-xl text-center">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-4 mb-6">
         <h2 className="text-2xl font-semibold text-white m-0">Napište mi</h2>
         {LINKEDIN_URL && (
@@ -57,12 +59,15 @@ export function ContactForm() {
       </p>
 
       <form
+        ref={formRef}
         id="contact-form"
         action={FORMSPREE_URL}
         method="POST"
         onSubmit={async (e) => {
           e.preventDefault();
+          if (sending) return;
           setFormStatus("");
+          setSending(true);
           const form = e.currentTarget;
           const data = new FormData(form);
           data.set("_replyto", (data.get("email") as string) || "");
@@ -80,6 +85,8 @@ export function ContactForm() {
             }
           } catch {
             setFormStatus("Chyba připojení. Zkuste to znovu.");
+          } finally {
+            setSending(false);
           }
         }}
         className="space-y-4 text-left max-w-md mx-auto"
@@ -147,10 +154,12 @@ export function ContactForm() {
         </div>
 
         <button
-          type="submit"
+          type="button"
+          disabled={sending}
+          onClick={() => formRef.current?.requestSubmit()}
           className="w-full py-3 px-4 rounded-lg bg-[#ef2c28] text-white font-semibold hover:bg-[#ef2c28]/90 focus:outline-none focus:ring-2 focus:ring-[#ef2c28] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
         >
-          Odeslat
+          {sending ? "Odesílám…" : "Odeslat"}
         </button>
 
         <p id="form-status" className="mt-4 min-h-[1.5rem] text-white/80 text-sm">
