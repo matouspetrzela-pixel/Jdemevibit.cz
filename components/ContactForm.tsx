@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 const FORMSPREE_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID || "xkovrywy";
 const FORMSPREE_CONFIGURED = Boolean(FORMSPREE_FORM_ID);
 const FORMSPREE_URL = `https://formspree.io/f/${FORMSPREE_FORM_ID}`;
@@ -7,6 +9,8 @@ const FORMSPREE_URL = `https://formspree.io/f/${FORMSPREE_FORM_ID}`;
 const LINKEDIN_URL = process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://www.linkedin.com/in/matouš-petržela";
 
 export function ContactForm() {
+  const [formStatus, setFormStatus] = useState("");
+
   if (!FORMSPREE_CONFIGURED) {
     return (
       <section id="kontakt-formular" className="container mx-auto px-4 py-8 max-w-xl">
@@ -53,10 +57,12 @@ export function ContactForm() {
       </p>
 
       <form
+        id="contact-form"
         action={FORMSPREE_URL}
-        method="post"
+        method="POST"
         onSubmit={async (e) => {
           e.preventDefault();
+          setFormStatus("");
           const form = e.currentTarget;
           const data = new FormData(form);
           data.set("_replyto", (data.get("email") as string) || "");
@@ -67,13 +73,13 @@ export function ContactForm() {
               headers: { Accept: "application/json" },
             });
             if (response.ok) {
-              alert("Zpráva byla úspěšně odeslána 👍");
+              setFormStatus("Zpráva byla úspěšně odeslána 👍");
               form.reset();
             } else {
-              alert("Odeslání se nepovedlo. Zkuste to prosím znovu.");
+              setFormStatus("Odeslání se nepovedlo. Zkuste to prosím znovu.");
             }
           } catch {
-            alert("Chyba připojení. Zkuste to znovu.");
+            setFormStatus("Chyba připojení. Zkuste to znovu.");
           }
         }}
         className="space-y-4 text-left max-w-md mx-auto"
@@ -144,8 +150,12 @@ export function ContactForm() {
           type="submit"
           className="w-full py-3 px-4 rounded-lg bg-[#ef2c28] text-white font-semibold hover:bg-[#ef2c28]/90 focus:outline-none focus:ring-2 focus:ring-[#ef2c28] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
         >
-          Odeslat zprávu
+          Odeslat
         </button>
+
+        <p id="form-status" className="mt-4 min-h-[1.5rem] text-white/80 text-sm">
+          {formStatus}
+        </p>
       </form>
 
       {LINKEDIN_URL && (
