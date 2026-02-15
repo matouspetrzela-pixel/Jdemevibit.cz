@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { projects } from "@/lib/projects";
 import { ProjectCard } from "./ProjectCard";
 import { UseCaseModal } from "./UseCaseModal";
 import type { Project } from "@/lib/projects";
 
-export function UseCasesSection() {
+interface UseCasesSectionProps {
+  projects: Project[];
+}
+
+export function UseCasesSection({ projects }: UseCasesSectionProps) {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   if (projects.length === 0) {

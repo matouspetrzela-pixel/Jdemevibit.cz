@@ -12,8 +12,10 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
   return (
     <article
       onClick={onClick}
-      className="bg-white/5 border border-white/10 rounded-lg overflow-hidden hover:bg-white/10 transition-colors cursor-pointer h-full flex flex-col"
+      className="bg-white/5 border border-white/10 rounded-lg overflow-hidden hover:bg-white/10 transition-colors cursor-pointer h-full flex flex-col relative group"
     >
+      {/* Červený rám při hover */}
+      <div className="absolute inset-0 rounded-lg border-2 border-[#ef2c28] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10" />
       {/* Grafický náhled nahoře */}
       <div className="relative w-full h-48 bg-white/5">
         {project.image ? (

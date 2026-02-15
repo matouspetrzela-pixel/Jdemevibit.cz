@@ -27,7 +27,6 @@ export function buildOGImageUrl(data: OGImageData): string {
     ...(data.category && { category: data.category }),
   });
   
-  // V produkci: ${baseUrl}/api/og?${params.toString()}
-  // Prozatím statická
-  return `${baseUrl}/og-image.jpg`;
+  // Dynamická generace přes API route
+  return `${baseUrl}/api/og?${params.toString()}`;
 }

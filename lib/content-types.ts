@@ -1,6 +1,8 @@
 // Datový model pro programmatic SEO
 // Use cases, návody, nástroje
 
+import { getProjects, type Project } from "./projects";
+
 export type ContentCategory = "use-case" | "navod" | "nastroj";
 
 export interface BaseContent {
@@ -29,6 +31,8 @@ export interface UseCase extends BaseContent {
   result: string;
   url?: string;
   githubUrl?: string;
+  // Lessons learned
+  lessonsLearned?: string[];
   // SEO
   keywords: string[];
   ogImage?: string;
@@ -67,8 +71,37 @@ export type Content = UseCase | Navod | Nastroj;
 
 // Helper pro získání všech content items
 export function getAllContent(): Content[] {
-  // TODO: Implementovat načítání z CMS nebo markdown souborů
-  return [];
+  // Načtení use-cases z projektů (pouze na serveru)
+  const projects = getProjects();
+  const useCases: UseCase[] = projects.map((project) => {
+    // Vytvoření slug z ID nebo title
+    const slug = project.id || project.title.toLowerCase().replace(/\s+/g, "-");
+    
+    return {
+      id: project.id,
+      slug,
+      title: project.title,
+      description: project.description,
+      category: "use-case",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      published: project.status === "Veřejný",
+      // Mapování z Project na UseCase
+      context: project.fullDescription || project.description,
+      goal: project.businessBenefit || "Vytvořit funkční řešení pomocí AI nástrojů.",
+      tools: project.technologies,
+      timeSpent: project.timeSpent,
+      process: project.fullDescription 
+        ? [project.fullDescription] 
+        : ["Projekt byl vytvořen pomocí AI nástrojů."],
+      result: project.fullDescription || project.description,
+      url: project.url,
+      keywords: project.technologies,
+      ogImage: project.image,
+    };
+  });
+
+  return useCases;
 }
 
 // Helper pro získání content podle slug

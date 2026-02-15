@@ -12,11 +12,11 @@ const nextConfig: NextConfig = {
             // Strict CSP - žádné inline skripty/styly
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval'", // Next.js vyžaduje unsafe-inline a unsafe-eval pro dev
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com", // Next.js vyžaduje unsafe-inline a unsafe-eval pro dev
               "style-src 'self' 'unsafe-inline' fonts.googleapis.com", // Next.js používá inline styly
               "font-src 'self' fonts.gstatic.com",
-              "img-src 'self' data: https:",
-              "connect-src 'self'",
+              "img-src 'self' data: https: https://www.google-analytics.com",
+              "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://*.google-analytics.com",
               "frame-ancestors 'none'",
             ].join('; ')
           },

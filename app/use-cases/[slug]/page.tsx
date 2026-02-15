@@ -130,15 +130,27 @@ export default async function UseCasePage({ params }: PageProps) {
         )}
 
         {/* Co bych dnes udělal jinak */}
-        <section className="mb-12">
-          <h3 className="text-2xl font-semibold text-white mb-4">
-            Co bych dnes udělal jinak
-          </h3>
-          <p className="text-white/80">
-            {/* TODO: Přidat pole "lessonsLearned" do UseCase typu */}
-            Tato sekce bude doplněna později s konkrétními poznatky z projektu.
-          </p>
-        </section>
+        {content.lessonsLearned && content.lessonsLearned.length > 0 ? (
+          <section className="mb-12">
+            <h3 className="text-2xl font-semibold text-white mb-4">
+              Co bych dnes udělal jinak
+            </h3>
+            <ul className="list-disc list-inside text-white/80 space-y-2">
+              {content.lessonsLearned.map((lesson, index) => (
+                <li key={index}>{lesson}</li>
+              ))}
+            </ul>
+          </section>
+        ) : (
+          <section className="mb-12">
+            <h3 className="text-2xl font-semibold text-white mb-4">
+              Co bych dnes udělal jinak
+            </h3>
+            <p className="text-white/80">
+              Tato sekce bude doplněna později s konkrétními poznatky z projektu.
+            </p>
+          </section>
+        )}
 
         {/* Výsledek */}
         <section className="mb-12">
