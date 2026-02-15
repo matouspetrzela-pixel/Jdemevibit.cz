@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const FORMSPREE_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID || "xkovrywy";
 const FORMSPREE_CONFIGURED = Boolean(FORMSPREE_FORM_ID);
-const SUBMIT_URL = "/api/contact";
+const FORMSPREE_URL = `https://formspree.io/f/${FORMSPREE_FORM_ID}`;
 
 const LINKEDIN_URL = process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://www.linkedin.com/in/matouš-petržela";
 
@@ -20,8 +20,9 @@ export function ContactForm() {
     setStatus("sending");
     const form = e.currentTarget;
     const formData = new FormData(form);
+    formData.set("_replyto", (formData.get("email") as string) || "");
     try {
-      const res = await fetch(SUBMIT_URL, {
+      const res = await fetch(FORMSPREE_URL, {
         method: "POST",
         body: formData,
         headers: { Accept: "application/json" },
@@ -32,7 +33,7 @@ export function ContactForm() {
       } else {
         const data = await res.json().catch(() => ({}));
         if (process.env.NODE_ENV === "development") {
-          console.warn("[Kontakt] Ne-OK odpověď:", res.status, data);
+          console.warn("[Kontakt] Formspree ne-OK:", res.status, data);
         }
         setStatus("error");
       }
