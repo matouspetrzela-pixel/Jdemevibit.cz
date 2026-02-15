@@ -6,17 +6,21 @@ const FORMSPREE_URL = `https://formspree.io/f/${FORMSPREE_ID}`;
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
+    const params = new URLSearchParams();
+    for (const [key, value] of formData.entries()) {
+      if (typeof value === "string") params.append(key, value);
+    }
     const replyTo = formData.get("email");
-    if (replyTo && typeof replyTo === "string") {
-      formData.set("_replyto", replyTo);
-    }
-    if (!formData.get("_subject")) {
-      formData.set("_subject", "Nová zpráva z webu");
-    }
+    if (replyTo && typeof replyTo === "string") params.set("_replyto", replyTo);
+    params.set("_subject", (formData.get("_subject") as string) || "Nová zpráva z webu");
+
     const res = await fetch(FORMSPREE_URL, {
       method: "POST",
-      body: formData,
-      headers: { Accept: "application/json" },
+      body: params.toString(),
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
+      },
     });
     const data = await res.json().catch(() => ({}));
     return NextResponse.json(data, { status: res.status });

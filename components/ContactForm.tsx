@@ -69,15 +69,15 @@ export function ContactForm() {
   }
 
   return (
-    <section id="kontakt-formular" className="container mx-auto px-4 py-8 max-w-xl">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <section id="kontakt-formular" className="container mx-auto px-4 py-8 max-w-xl text-center">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-4 mb-6">
         <h2 className="text-2xl font-semibold text-white m-0">Napište mi</h2>
         {LINKEDIN_URL && (
           <a
             href={LINKEDIN_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-white/80 hover:text-[#7b3beb] transition-colors text-sm sm:text-base shrink-0"
+            className="text-white/80 hover:text-[#7b3beb] transition-colors text-sm sm:text-base"
             aria-label="LinkedIn profil"
           >
             Také mě najdete na LinkedIn →
@@ -90,19 +90,19 @@ export function ContactForm() {
       </p>
 
       {status === "success" && (
-        <div className="mb-6 p-4 rounded-lg bg-green-500/20 text-green-300 text-sm">
+        <div className="mb-6 p-4 rounded-lg bg-green-500/20 text-green-300 text-sm text-center">
           Zpráva byla odeslána. Ozvu se vám na uvedený email.
         </div>
       )}
       {status === "error" && (
-        <div className="mb-6 p-4 rounded-lg bg-red-500/20 text-red-300 text-sm">
+        <div className="mb-6 p-4 rounded-lg bg-red-500/20 text-red-300 text-sm text-center">
           Odeslání se nepovedlo. Zkuste to prosím znovu nebo mi napište na LinkedIn.
         </div>
       )}
 
       <form
         onSubmit={handleSubmit}
-        className="space-y-4"
+        className="space-y-4 text-left max-w-md mx-auto"
         aria-label="Kontaktní formulář"
         noValidate
       >
