@@ -34,29 +34,18 @@ interface MarkdownFrontmatter {
 // Načtení projektů z markdown souborů
 function loadProjectsFromMarkdown(): Project[] {
   try {
-    // Cesta k projects adresáři
-    // V Next.js je process.cwd() v jdemevibit-web/, takže projects/ je o úroveň výš
-    let projectsDir = path.join(process.cwd(), "..", "projects");
-    
-    // Fallback: pokud neexistuje, zkusit přímo z rootu
-    if (!fs.existsSync(projectsDir)) {
-      const altPath = path.join(process.cwd(), "projects");
-      if (fs.existsSync(altPath)) {
-        projectsDir = altPath;
-      } else {
-        // Další fallback - absolutní cesta z workspace rootu
-        const workspaceRoot = path.resolve(process.cwd(), "..");
-        const workspaceProjects = path.join(workspaceRoot, "projects");
-        if (fs.existsSync(workspaceProjects)) {
-          projectsDir = workspaceProjects;
-        } else {
-          console.warn(`Projects directory not found. Tried: ${projectsDir}, ${altPath}, ${workspaceProjects}`);
-          return [];
-        }
-      }
+    // Primárně: projects/ v rootu projektu (Vercel i lokální build z jdemevibit-web/)
+    const inRepo = path.join(process.cwd(), "projects");
+    if (fs.existsSync(inRepo)) {
+      return loadProjectsFromPath(inRepo);
     }
-    
-    return loadProjectsFromPath(projectsDir);
+    // Fallback: workspace má projects/ vedle jdemevibit-web (lokální vývoj)
+    const parentDir = path.join(process.cwd(), "..", "projects");
+    if (fs.existsSync(parentDir)) {
+      return loadProjectsFromPath(parentDir);
+    }
+    console.warn(`Projects directory not found. Tried: ${inRepo}, ${parentDir}`);
+    return [];
   } catch (error) {
     console.error("Error loading projects from markdown:", error);
     return [];
