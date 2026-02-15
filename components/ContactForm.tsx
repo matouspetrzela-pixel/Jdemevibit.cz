@@ -86,7 +86,7 @@ export function ContactForm() {
       </div>
 
       <p className="text-white/70 text-sm mb-6">
-        Vyplňte svůj email, abych vám mohl odpovědět, a zprávu.
+        Vyplňte jméno, email a zprávu – ozvu se vám na uvedený email.
       </p>
 
       {status === "success" && (
@@ -114,6 +114,25 @@ export function ContactForm() {
           className="absolute -left-[9999px] w-px h-px"
           aria-hidden
         />
+        <input type="hidden" name="_subject" value="Nová zpráva z webu" />
+
+        <div>
+          <label
+            htmlFor="contact-name"
+            className="block text-white/80 text-sm font-medium mb-1"
+          >
+            Jméno <span className="text-[#ef2c28]">*</span>
+          </label>
+          <input
+            id="contact-name"
+            type="text"
+            name="name"
+            required
+            placeholder="Vaše jméno"
+            className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-[#ef2c28]"
+            disabled={status === "sending"}
+          />
+        </div>
 
         <div>
           <label

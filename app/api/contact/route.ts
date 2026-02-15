@@ -10,6 +10,9 @@ export async function POST(request: NextRequest) {
     if (replyTo && typeof replyTo === "string") {
       formData.set("_replyto", replyTo);
     }
+    if (!formData.get("_subject")) {
+      formData.set("_subject", "Nová zpráva z webu");
+    }
     const res = await fetch(FORMSPREE_URL, {
       method: "POST",
       body: formData,
