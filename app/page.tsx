@@ -1,7 +1,5 @@
 import { Header } from "@/components/Header";
 import { generatePageMetadata } from "@/app/seo/generateMetadata";
-import { FAQSection } from "@/components/FAQSection";
-import { SocialProofSection } from "@/components/SocialProofSection";
 import { HowItWorksSection } from "@/components/HowItWorksSection";
 import { StarterProjectsCTA } from "@/components/StarterProjectsCTA";
 import Link from "next/link";
@@ -49,12 +47,6 @@ export default function Home() {
 
         {/* How It Works sekce */}
         <HowItWorksSection />
-
-        {/* Social Proof sekce */}
-        <SocialProofSection />
-
-        {/* FAQ sekce */}
-        <FAQSection />
 
         {/* Starter Projects CTA */}
         <StarterProjectsCTA />
