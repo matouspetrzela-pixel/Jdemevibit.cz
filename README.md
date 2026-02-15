@@ -21,10 +21,13 @@ cp .env.example .env.local
 
 2. Vyplňte hodnoty v `.env.local`:
 ```
-NEXT_PUBLIC_CONTACT_EMAIL=your-email@example.com
+NEXT_PUBLIC_SITE_URL=https://www.jdemevibit.cz
 NEXT_PUBLIC_LINKEDIN_URL=https://linkedin.com/in/yourprofile
-NEXT_PUBLIC_SITE_URL=https://jdemevibit.cz
+NEXT_PUBLIC_FORMSPREE_FORM_ID=xkovrywy   # váš formulář https://formspree.io/f/xkovrywy
 ```
+Kontaktní formulář: na [formspree.io](https://formspree.io) vytvořte formulář a zadejte email, na který mají chodit zprávy. Do .env přidejte jejich Form ID.
+
+**Zprávy mi nechodí na email?** (Formspree free): (1) Po přidání formuláře Formspree pošle na váš email **ověřovací zprávu** – je nutné na odkaz v ní kliknout, jinak se zprávy nedoručují. (2) Zkontrolujte složku Spam. (3) V Formspree → váš formulář → Settings zkontrolujte, že je nastavený správný příjemce (Email to receive submissions).
 
 ### Spuštění development serveru
 
@@ -48,7 +51,7 @@ jdemevibit-web/
 │   ├── Hero.tsx            # Hero sekce
 │   ├── UseCasesSection.tsx # Sekce use cases
 │   ├── ProjectCard.tsx      # Karta projektu
-│   ├── ContactInfo.tsx     # Kontaktní údaje
+│   ├── ContactForm.tsx     # Kontaktní formulář (Formspree)
 │   └── StructuredData.tsx  # SEO structured data
 ├── lib/                     # Utility funkce
 │   ├── projects.ts         # Data projektů
@@ -97,8 +100,12 @@ npm start
 
 1. Pushněte kód na GitHub
 2. Připojte repository k Vercel
-3. Nastavte environment variables v Vercel dashboard
-4. Přidejte custom domain: `jdemevibit.cz`
+3. **Environment variables** (Vercel → Project → Settings → Environment Variables, prostředí Production):
+   - `NEXT_PUBLIC_SITE_URL` = `https://www.jdemevibit.cz`
+   - `NEXT_PUBLIC_LINKEDIN_URL` = váš LinkedIn profil
+   - `NEXT_PUBLIC_FORMSPREE_FORM_ID` = `xkovrywy` (kontaktní formulář – bez toho formulář na produkci neodešle zprávy)
+   - `NEXT_PUBLIC_GA_ID` = vaše Google Analytics ID (volitelné)
+4. Přidejte custom domain: `www.jdemevibit.cz`
 5. SSL certifikát se nastaví automaticky
 
 ## 🛠️ Technologie

@@ -1,5 +1,5 @@
 import { generatePageMetadata } from "@/app/seo/generateMetadata";
-import { ContactInfo } from "@/components/ContactInfo";
+import { ContactForm } from "@/components/ContactForm";
 import { BackButton } from "@/components/BackButton";
 import { CommunitySection } from "@/components/CommunitySection";
 
@@ -21,7 +21,7 @@ export default function ContactPage() {
         {/* Komunita sekce */}
         <CommunitySection />
 
-        <ContactInfo />
+        <ContactForm />
       </article>
     </div>
   );
