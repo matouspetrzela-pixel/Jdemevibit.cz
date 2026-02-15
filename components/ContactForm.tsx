@@ -5,6 +5,7 @@ import { useState, useRef } from "react";
 const FORMSPREE_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID || "xkovrywy";
 const FORMSPREE_CONFIGURED = Boolean(FORMSPREE_FORM_ID);
 const FORMSPREE_URL = `https://formspree.io/f/${FORMSPREE_FORM_ID}`;
+const API_CONTACT = "/api/contact";
 
 const LINKEDIN_URL = process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://www.linkedin.com/in/matouš-petržela";
 
@@ -72,7 +73,7 @@ export function ContactForm() {
           const data = new FormData(form);
           data.set("_replyto", (data.get("email") as string) || "");
           try {
-            const response = await fetch(form.action, {
+            const response = await fetch(API_CONTACT, {
               method: "POST",
               body: data,
               headers: { Accept: "application/json" },

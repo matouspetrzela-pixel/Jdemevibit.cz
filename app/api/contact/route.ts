@@ -7,22 +7,21 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const email = (formData.get("email") as string) || "";
-    const body: Record<string, string> = {
-      name: (formData.get("name") as string) || "",
-      email,
-      message: (formData.get("message") as string) || "",
-      _subject: (formData.get("_subject") as string) || "Nová zpráva z webu",
-      _replyto: email,
-    };
+    const params = new URLSearchParams();
+    params.set("name", (formData.get("name") as string) || "");
+    params.set("email", email);
+    params.set("message", (formData.get("message") as string) || "");
+    params.set("_subject", (formData.get("_subject") as string) || "Nová zpráva z webu");
+    params.set("_replyto", email);
     const gotcha = formData.get("_gotcha");
-    if (gotcha && typeof gotcha === "string") body._gotcha = gotcha;
+    if (gotcha && typeof gotcha === "string") params.set("_gotcha", gotcha);
 
     const origin = request.headers.get("origin") || request.headers.get("referer") || "https://www.jdemevibit.cz";
     const res = await fetch(FORMSPREE_URL, {
       method: "POST",
-      body: JSON.stringify(body),
+      body: params.toString(),
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
         Referer: origin,
         "User-Agent": request.headers.get("user-agent") || "Mozilla/5.0 (compatible; jdemevibit/1.0)",
