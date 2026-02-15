@@ -32,14 +32,21 @@ export default function Home() {
               Autenticky. Z praxe.
             </h2>
 
-            {/* CTA: Prozkoumat use cases */}
-            <div className="mt-8 animate-hero-fade">
+            {/* CTA: Prozkoumat use cases + Kontakt */}
+            <div className="mt-8 animate-hero-fade flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link
                 href="/use-cases"
                 className="text-[#ffffff] text-lg md:text-xl inline-flex items-center gap-2 transition-all opacity-90 hover:opacity-100 border-b border-[#ef2c28] border-opacity-60 hover:border-opacity-100"
               >
                 Prozkoumat use cases
                 <span className="text-[#ef2c28]">→</span>
+              </Link>
+              <Link
+                href="/kontakt"
+                className="text-white/80 text-base md:text-lg hover:text-white hover:underline transition-all"
+                aria-label="Přejít na kontaktní formulář"
+              >
+                Napište mi
               </Link>
             </div>
           </div>

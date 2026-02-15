@@ -100,7 +100,12 @@ export function ContactForm() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-4"
+        aria-label="Kontaktní formulář"
+        noValidate
+      >
         <input
           type="text"
           name="_gotcha"
