@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 const FORMSPREE_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID || "xkovrywy";
 const FORMSPREE_CONFIGURED = Boolean(FORMSPREE_FORM_ID);
 const FORMSPREE_URL = `https://formspree.io/f/${FORMSPREE_FORM_ID}`;
@@ -9,42 +7,6 @@ const FORMSPREE_URL = `https://formspree.io/f/${FORMSPREE_FORM_ID}`;
 const LINKEDIN_URL = process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://www.linkedin.com/in/matouš-petržela";
 
 export function ContactForm() {
-  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    if (!FORMSPREE_CONFIGURED) {
-      setStatus("error");
-      return;
-    }
-    setStatus("sending");
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    formData.set("_replyto", (formData.get("email") as string) || "");
-    try {
-      const res = await fetch(FORMSPREE_URL, {
-        method: "POST",
-        body: formData,
-        headers: { Accept: "application/json" },
-      });
-      if (res.ok) {
-        setStatus("success");
-        form.reset();
-      } else {
-        const data = await res.json().catch(() => ({}));
-        if (process.env.NODE_ENV === "development") {
-          console.warn("[Kontakt] Formspree ne-OK:", res.status, data);
-        }
-        setStatus("error");
-      }
-    } catch (err) {
-      if (process.env.NODE_ENV === "development") {
-        console.warn("[Kontakt] Chyba při odeslání:", err);
-      }
-      setStatus("error");
-    }
-  }
-
   if (!FORMSPREE_CONFIGURED) {
     return (
       <section id="kontakt-formular" className="container mx-auto px-4 py-8 max-w-xl">
@@ -90,22 +52,32 @@ export function ContactForm() {
         Vyplňte jméno, email a zprávu – ozvu se vám na uvedený email.
       </p>
 
-      {status === "success" && (
-        <div className="mb-6 p-4 rounded-lg bg-green-500/20 text-green-300 text-sm text-center">
-          Zpráva byla odeslána. Ozvu se vám na uvedený email.
-        </div>
-      )}
-      {status === "error" && (
-        <div className="mb-6 p-4 rounded-lg bg-red-500/20 text-red-300 text-sm text-center">
-          Odeslání se nepovedlo. Zkuste to prosím znovu nebo mi napište na LinkedIn.
-        </div>
-      )}
-
       <form
-        onSubmit={handleSubmit}
+        action={FORMSPREE_URL}
+        method="post"
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const form = e.currentTarget;
+          const data = new FormData(form);
+          data.set("_replyto", (data.get("email") as string) || "");
+          try {
+            const response = await fetch(form.action, {
+              method: "POST",
+              body: data,
+              headers: { Accept: "application/json" },
+            });
+            if (response.ok) {
+              alert("Zpráva byla úspěšně odeslána 👍");
+              form.reset();
+            } else {
+              alert("Odeslání se nepovedlo. Zkuste to prosím znovu.");
+            }
+          } catch {
+            alert("Chyba připojení. Zkuste to znovu.");
+          }
+        }}
         className="space-y-4 text-left max-w-md mx-auto"
         aria-label="Kontaktní formulář"
-        noValidate
       >
         <input
           type="text"
@@ -131,7 +103,6 @@ export function ContactForm() {
             required
             placeholder="Vaše jméno"
             className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-[#ef2c28]"
-            disabled={status === "sending"}
           />
         </div>
 
@@ -149,7 +120,6 @@ export function ContactForm() {
             required
             placeholder="vas@email.cz"
             className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-[#ef2c28]"
-            disabled={status === "sending"}
           />
         </div>
 
@@ -167,16 +137,14 @@ export function ContactForm() {
             rows={5}
             placeholder="Co potřebujete? Napište mi..."
             className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-[#ef2c28] resize-y min-h-[120px]"
-            disabled={status === "sending"}
           />
         </div>
 
         <button
           type="submit"
-          disabled={status === "sending"}
           className="w-full py-3 px-4 rounded-lg bg-[#ef2c28] text-white font-semibold hover:bg-[#ef2c28]/90 focus:outline-none focus:ring-2 focus:ring-[#ef2c28] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
         >
-          {status === "sending" ? "Odesílám…" : "Odeslat zprávu"}
+          Odeslat zprávu
         </button>
       </form>
 
