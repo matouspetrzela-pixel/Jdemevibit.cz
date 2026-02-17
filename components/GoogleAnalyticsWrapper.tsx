@@ -1,23 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { GoogleAnalytics } from '@next/third-parties/google';
+import { useEffect } from "react";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
+/**
+ * FIXED: Force-enable Google Analytics (cookie consent bypass).
+ * GA se načítá vždy, když je nastavené NEXT_PUBLIC_GA_ID.
+ * Pro obnovení kontroly souhlasu s cookies vrátit podmínku hasConsent.
+ */
 export function GoogleAnalyticsWrapper() {
-  const [hasConsent, setHasConsent] = useState(false);
-
   useEffect(() => {
-    // Zkontroluj souhlas s cookies
-    const consent = localStorage.getItem("cookie-consent");
-    if (consent === "accepted") {
-      setHasConsent(true);
+    if (typeof window === "undefined") return;
+    if (!GA_ID) {
+      console.warn(
+        "[Jdemevibit] Google Analytics se nenačítá: chybí NEXT_PUBLIC_GA_ID. Nastavte ho ve Vercel → Settings → Environment Variables (Production) a redeploy."
+      );
+      return;
     }
+    console.info("[Jdemevibit] Google Analytics načten, měřicí ID:", GA_ID.replace(/(G-.{4}).*(.{4})/, "$1…$2"));
   }, []);
 
-  // Načti GA jen pokud má uživatel souhlas a je nastaveno GA ID
-  if (!hasConsent || !GA_ID) {
+  if (!GA_ID) {
     return null;
   }
 

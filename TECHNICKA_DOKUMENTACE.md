@@ -7,8 +7,9 @@
 3. [Security](#security)
 4. [Performance](#performance)
 5. [Content Struktura](#content-struktura)
-6. [Deployment](#deployment)
-7. [Vývoj](#vývoj)
+6. [Kontaktní formulář a Formspree](#kontaktní-formulář-a-formspree)
+7. [Deployment](#deployment)
+8. [Vývoj](#vývoj)
 
 ---
 
@@ -52,7 +53,7 @@ jdemevibit-web/
 │   ├── Hero.tsx                # Hero sekce
 │   ├── UseCasesSection.tsx    # Use cases grid
 │   ├── ProjectCard.tsx         # Karta projektu
-│   ├── ContactInfo.tsx         # Kontaktní údaje
+│   ├── ContactForm.tsx          # Kontaktní formulář (Formspree přes /api/contact)
 │   ├── StructuredData.tsx      # JSON-LD komponenta
 │   └── OptimizedImage.tsx      # Optimalizovaná Image komponenta
 ├── lib/
@@ -419,22 +420,104 @@ interface UseCase extends BaseContent {
 
 ---
 
+## 📬 Kontaktní formulář a Formspree
+
+### Architektura odesílání
+
+Odeslání zprávy neprobíhá přímo z prohlížeče na Formspree (kvůli blokování v síti, CORS nebo rozšířeních), ale přes vlastní API:
+
+1. **Prohlížeč** – uživatel vyplní formulář a klikne na „Odeslat“.
+2. **Klientský kód** (`components/ContactForm.tsx`) – `fetch("POST", "/api/contact", FormData)` s poli `name`, `email`, `message`, `_subject`, `_replyto`, `_gotcha`.
+3. **API route** (`app/api/contact/route.ts`) – přijme POST, sestaví `application/x-www-form-urlencoded` a pošle na `https://formspree.io/f/{FORM_ID}` ze serveru (Vercel serverless).
+4. **Formspree** – zpracuje odeslání a pošle notifikaci na váš email.
+
+**Soubory:**
+- `components/ContactForm.tsx` – formulář (id `contact-form`), stav `form-status`, tlačítko volá `formRef.current.requestSubmit()`.
+- `app/api/contact/route.ts` – proxy na Formspree; používá `NEXT_PUBLIC_FORMSPREE_FORM_ID` (nebo fallback `xkovrywy`).
+
+### Environment variables
+
+| Proměnná | Povinné | Popis |
+|----------|---------|--------|
+| `NEXT_PUBLIC_FORMSPREE_FORM_ID` | ano (produkce) | Form ID z Formspree (např. `xkovrywy`). Bez něj formulář na webu neodešle zprávy. |
+| `NEXT_PUBLIC_SITE_URL` | doporučeno | Bázová URL webu (např. `https://www.jdemevibit.cz`). |
+| `NEXT_PUBLIC_LINKEDIN_URL` | volitelné | Odkaz na LinkedIn v sekci Kontakt. |
+
+Lokálně: zkopírovat `.env.example` do `.env.local` a vyplnit. Na Vercel: Settings → Environment Variables (Production).
+
+### Formspree (free verze)
+
+- **Registrace:** Na [formspree.io](https://formspree.io) vytvořte formulář a zadejte email pro příjem zpráv.
+- **Ověření emailu:** Po vytvoření formuláře Formspree pošle ověřovací email – je nutné na odkaz kliknout, jinak zprávy nemusí chodit.
+- **Zprávy ve spamu:** U free verze mohou notifikace od Formspree končit ve spamu. Doporučení:
+  - Ve složce Spam zvolit „Není spam“ u jedné zprávy od Formspree.
+  - Přidat odesílatele (Formspree) do kontaktů v Gmailu/Outlooku.
+  - V nastavení formuláře ve Formspree zkontrolovat, že je nastavený správný příjemce (Email to receive submissions).
+- **CAPTCHA:** Pokud ve Formspree zapnete CAPTCHA, musí frontend posílat platný reCAPTCHA token (pole `g-recaptcha-response`). Aktuální implementace CAPTCHA nepoužívá – při zapnuté CAPTCHA by Formspree mohl odeslání odmítat; pro free bez reCAPTCHA nechte CAPTCHA vypnutou a používejte např. Formshield.
+
+### Chybové stavy
+
+- **„Chyba připojení. Zkuste to znovu.“** – `fetch("/api/contact")` selhal (síť, výpadek). Odesílání přes `/api/contact` minimalizuje blokování z prohlížeče.
+- **„Odeslání se nepovedlo.“** – Formspree vrátil ne-OK (např. 422). Zkontrolovat Formspree dashboard a nastavení formuláře.
+
+---
+
+## 📊 Google Analytics
+
+### Implementace
+
+- **Komponenta:** `components/GoogleAnalyticsWrapper.tsx` – načte skript GA pouze pokud:
+  1. je nastavené **`NEXT_PUBLIC_GA_ID`** (Google Analytics 4, formát `G-XXXXXXXXXX`),
+  2. uživatel **udělil souhlas s cookies** (v localStorage `cookie-consent` = `"accepted"`).
+- Cookie lišta (`components/CookieConsent.tsx`) zobrazuje banner; po kliknutí „Přijmout“ se uloží souhlas a stránka se znovu načte, aby se GA načetl.
+
+### Proč v GA nevidím dnešní návštěvnost
+
+1. **Chybí `NEXT_PUBLIC_GA_ID` na Vercel**  
+   Bez této proměnné v Production env se na živém webu GA vůbec nenačte.  
+   **Řešení:** Vercel → Project → Settings → Environment Variables → přidat `NEXT_PUBLIC_GA_ID` = vaše GA4 měřicí ID (G-…) → uložit a znovu nasadit (redeploy).
+
+2. **Souhlas s cookies**  
+   Data posílají jen návštěvníci, kteří klikli na „Přijmout“. Kdo banner zavře, odmítne nebo nepřijme, není měřen.  
+   **Důsledek:** Část návštěvnosti (někdy velká) v GA nebude.
+
+3. **Zpoždění v GA4**  
+   V GA4 se údaje za „dnes“ často zobrazují s odstupem (minuty až desítky minut); v některých reportech může být zpoždění i 24–48 h.
+
+4. **Blokování v prohlížeči**  
+   Rozšíření (adblock, privacy) mohou blokovat `googletagmanager.com` / `google-analytics.com` – tito uživatelé se v GA neobjeví.
+
+### Checklist
+
+- [ ] Vercel: `NEXT_PUBLIC_GA_ID` nastavené pro prostředí Production.
+- [ ] Použité je GA4 měřicí ID (začíná `G-`), ne staré UA-.
+- [ ] Po změně env na Vercel byl spuštěn nový deploy.
+- [ ] V GA4 je v datových tocích přidaná URL webu (např. `www.jdemevibit.cz`).
+
+---
+
 ## 🚀 Deployment
 
-### Vercel Deployment
+### Vercel – propojení a deploy
+
+- Repozitář (GitHub) je propojen s Vercel projektem. **Push na větev `main`** spustí automatický build a nasazení.
+- Po pushi zkontrolovat stav v **Vercel Dashboard → Project → Deployments**.
+
+**Environment Variables na Vercel (Production):**
+```
+NEXT_PUBLIC_SITE_URL=https://www.jdemevibit.cz
+NEXT_PUBLIC_LINKEDIN_URL=https://linkedin.com/in/...
+NEXT_PUBLIC_FORMSPREE_FORM_ID=xkovrywy
+```
+Bez `NEXT_PUBLIC_FORMSPREE_FORM_ID` formulář na produkci nebude fungovat.
+
+### Vercel – ostatní
 
 **Automatické:**
 - SSL certifikáty (Let's Encrypt)
 - WAF ochrana
 - CDN distribuce
 - Edge functions
-
-**Environment Variables:**
-```
-NEXT_PUBLIC_SITE_URL=https://jdemevibit.cz
-NEXT_PUBLIC_CONTACT_EMAIL_OBFUSCATED=<obfuscated>
-NEXT_PUBLIC_LINKEDIN_URL=https://linkedin.com/in/...
-```
 
 ### Custom Domain
 
@@ -610,13 +693,14 @@ const newUseCase: UseCase = {
 
 ## ✅ Checklist před deployem
 
-- [ ] Environment variables nastavené
+- [ ] Environment variables nastavené (včetně `NEXT_PUBLIC_FORMSPREE_FORM_ID` na Vercel)
 - [ ] `.env.local` v `.gitignore`
 - [ ] Security headers testovány
 - [ ] CSP validován
 - [ ] SEO metadata zkontrolováno
 - [ ] Structured data validováno
 - [ ] robots.txt a sitemap.xml funkční
+- [ ] Kontaktní formulář: odeslání přes `/api/contact` a doručení do Formspree ověřeno
 - [ ] Performance testován (Lighthouse 90+)
 - [ ] Custom domain nastaven
 - [ ] SSL certifikát aktivní
@@ -625,5 +709,5 @@ const newUseCase: UseCase = {
 
 ---
 
-**Poslední aktualizace:** 2024
+**Poslední aktualizace:** 2025  
 **Verze:** 1.0.0
