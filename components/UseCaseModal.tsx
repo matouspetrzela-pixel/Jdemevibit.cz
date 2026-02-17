@@ -132,7 +132,7 @@ export function UseCaseModal({ project, onClose }: UseCaseModalProps) {
                 <span className="text-green-400">Veřejný</span>
               )}
               {project.status === "PROTOTYP" && (
-                <span className="text-[#ef2c28]">PROTOTYP</span>
+                <span className="text-[#ef2c28]">Prototyp</span>
               )}
             </div>
           </div>

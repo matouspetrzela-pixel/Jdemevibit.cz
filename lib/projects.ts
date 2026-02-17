@@ -34,17 +34,23 @@ interface MarkdownFrontmatter {
 // Načtení projektů z markdown souborů
 function loadProjectsFromMarkdown(): Project[] {
   try {
-    // Primárně: projects/ v rootu projektu (Vercel i lokální build z jdemevibit-web/)
-    const inRepo = path.join(process.cwd(), "projects");
+    const cwd = process.cwd();
+    // 1) Při běhu z kořene Jdemevibit preferovat jdemevibit-web/projects (obsahuje všechny projekty včetně 7, 8)
+    const webProjects = path.join(cwd, "jdemevibit-web", "projects");
+    if (fs.existsSync(webProjects)) {
+      return loadProjectsFromPath(webProjects);
+    }
+    // 2) projects/ v aktuálním adresáři (běh z jdemevibit-web → jdemevibit-web/projects)
+    const inRepo = path.join(cwd, "projects");
     if (fs.existsSync(inRepo)) {
       return loadProjectsFromPath(inRepo);
     }
-    // Fallback: workspace má projects/ vedle jdemevibit-web (lokální vývoj)
-    const parentDir = path.join(process.cwd(), "..", "projects");
+    // 3) Fallback: projects/ o úroveň výš (workspace má projects vedle jdemevibit-web)
+    const parentDir = path.join(cwd, "..", "projects");
     if (fs.existsSync(parentDir)) {
       return loadProjectsFromPath(parentDir);
     }
-    console.warn(`Projects directory not found. Tried: ${inRepo}, ${parentDir}`);
+    console.warn(`Projects directory not found. Tried: ${webProjects}, ${inRepo}, ${parentDir}`);
     return [];
   } catch (error) {
     console.error("Error loading projects from markdown:", error);
