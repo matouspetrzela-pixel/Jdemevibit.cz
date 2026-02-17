@@ -3,7 +3,7 @@ import { Roboto } from "next/font/google";
 import "./globals.css";
 import { StructuredData } from "@/components/StructuredData";
 import { CookieConsent } from "@/components/CookieConsent";
-import { GoogleAnalyticsWrapper } from "@/components/GoogleAnalyticsWrapper";
+import GoogleAnalyticsWrapper from "@/components/GoogleAnalyticsWrapper";
 
 const roboto = Roboto({
   weight: ["300", "400", "500", "700", "900"],
