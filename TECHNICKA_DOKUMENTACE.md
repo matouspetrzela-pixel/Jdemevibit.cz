@@ -5,11 +5,12 @@
 1. [Architektura](#architektura)
 2. [SEO Implementace](#seo-implementace)
 3. [Security](#security)
-4. [Performance](#performance)
-5. [Content Struktura](#content-struktura)
-6. [Kontaktní formulář a Formspree](#kontaktní-formulář-a-formspree)
-7. [Deployment](#deployment)
-8. [Vývoj](#vývoj)
+4. [Pravidla pro AI a publikaci citlivých údajů](#pravidla-pro-ai-a-publikaci-citlivých-údajů)
+5. [Performance](#performance)
+6. [Content Struktura](#content-struktura)
+7. [Kontaktní formulář a Formspree](#kontaktní-formulář-a-formspree)
+8. [Deployment](#deployment)
+9. [Vývoj](#vývoj)
 
 ---
 
@@ -318,6 +319,20 @@ const email = deobfuscateEmail(process.env.NEXT_PUBLIC_CONTACT_EMAIL_OBFUSCATED)
 
 ---
 
+## 🤖 Pravidla pro AI a publikaci citlivých údajů
+
+**Při práci s AI asistentem (např. v Cursoru) v tomto projektu platí:**
+
+- **Nikdy nepublikovat ani uveřejňovat** odkazy na účty, přihlašovací stránky ani citlivé identifikátory, například:
+  - Vercel (dashboard, projekty, nastavení)
+  - GitHub (repozitáře, organizace, profily)
+  - API klíče, tokeny, hesla a jakékoli secrets
+  - Ostatní služby typu Formspree, analytics účty a podobně
+- **Výjimka:** Tyto údaje nebo odkazy smí asistent uvést **pouze tehdy, když to výslovně požaduje sám uživatel**. Jinak nikdy.
+- Cíl: zabránit náhodnému vložení citlivých odkazů nebo credentials do commitů, dokumentace, chatů nebo veřejných výstupů.
+
+---
+
 ## ⚡ Performance
 
 ### Core Web Vitals
@@ -428,12 +443,13 @@ Odeslání zprávy neprobíhá přímo z prohlížeče na Formspree (kvůli blok
 
 1. **Prohlížeč** – uživatel vyplní formulář a klikne na „Odeslat“.
 2. **Klientský kód** (`components/ContactForm.tsx`) – `fetch("POST", "/api/contact", FormData)` s poli `name`, `email`, `message`, `_subject`, `_replyto`, `_gotcha`.
-3. **API route** (`app/api/contact/route.ts`) – přijme POST, sestaví `application/x-www-form-urlencoded` a pošle na `https://formspree.io/f/{FORM_ID}` ze serveru (Vercel serverless).
+3. **API route** (`app/api/contact/route.ts`) – přijme POST, pošle data na Formspree a při úspěchu zároveň zapíše záznam do Airtable (pokud jsou nastavené `AIRTABLE_API_KEY` a `AIRTABLE_BASE_ID`).
 4. **Formspree** – zpracuje odeslání a pošle notifikaci na váš email.
+5. **Airtable** (volitelně) – ukládá zprávy do tabulky (např. „Zprávy“) pro další práci s kontakty a budování komunity.
 
 **Soubory:**
 - `components/ContactForm.tsx` – formulář (id `contact-form`), stav `form-status`, tlačítko volá `formRef.current.requestSubmit()`.
-- `app/api/contact/route.ts` – proxy na Formspree; používá `NEXT_PUBLIC_FORMSPREE_FORM_ID` (nebo fallback `xkovrywy`).
+- `app/api/contact/route.ts` – proxy na Formspree + zápis do Airtable; používá `NEXT_PUBLIC_FORMSPREE_FORM_ID`, volitelně `AIRTABLE_*`.
 
 ### Environment variables
 
@@ -442,6 +458,9 @@ Odeslání zprávy neprobíhá přímo z prohlížeče na Formspree (kvůli blok
 | `NEXT_PUBLIC_FORMSPREE_FORM_ID` | ano (produkce) | Form ID z Formspree (např. `xkovrywy`). Bez něj formulář na webu neodešle zprávy. |
 | `NEXT_PUBLIC_SITE_URL` | doporučeno | Bázová URL webu (např. `https://www.jdemevibit.cz`). |
 | `NEXT_PUBLIC_LINKEDIN_URL` | volitelné | Odkaz na LinkedIn v sekci Kontakt. |
+| `AIRTABLE_API_KEY` | volitelné | Airtable Personal Access Token (začíná `pat…`). Bez něj se zprávy neukládají do Airtable. |
+| `AIRTABLE_BASE_ID` | volitelné | ID Airtable base (začíná `app…`). |
+| `AIRTABLE_TABLE_CONTACTS` | volitelné | Název tabulky pro zprávy (výchozí: `Zprávy`). Sloupce v tabulce: Jméno, Email, Zpráva. |
 
 Lokálně: zkopírovat `.env.example` do `.env.local` a vyplnit. Na Vercel: Settings → Environment Variables (Production).
 
@@ -459,6 +478,16 @@ Lokálně: zkopírovat `.env.example` do `.env.local` a vyplnit. Na Vercel: Sett
 
 - **„Chyba připojení. Zkuste to znovu.“** – `fetch("/api/contact")` selhal (síť, výpadek). Odesílání přes `/api/contact` minimalizuje blokování z prohlížeče.
 - **„Odeslání se nepovedlo.“** – Formspree vrátil ne-OK (např. 422). Zkontrolovat Formspree dashboard a nastavení formuláře.
+
+### Airtable (ukládání zpráv)
+
+Pokud jsou nastavené `AIRTABLE_API_KEY` a `AIRTABLE_BASE_ID`, API po úspěšném odeslání na Formspree zapíše záznam do zadané Airtable tabulky.
+
+**Povinná struktura tabulky:** Název tabulky dle `AIRTABLE_TABLE_CONTACTS` (výchozí `Zprávy`). Sloupce musí mít **přesně** tyto názvy: **Jméno**, **Email**, **Zpráva** (typy: Single line text, Email, Long text dle libosti).
+
+Při chybě zápisu do Airtable se chyba pouze zaloguje v terminálu (`[api/contact] Airtable zápis selhal`) – uživateli se vrátí úspěch (zpráva už byla odeslána přes Formspree).
+
+**Chyba 403 (INVALID_PERMISSIONS_OR_MODEL_NOT_FOUND):** Token nemá oprávnění k base nebo tabulka nebyla nalezena. Zkontrolujte: (1) Personal Access Token má scope `data.records:write` a v „Access“ je vybraná příslušná base; (2) `AIRTABLE_BASE_ID` odpovídá base (URL base obsahuje `app...`); (3) `AIRTABLE_TABLE_CONTACTS` je přesný název záložky tabulky v Airtable (ne Table ID).
 
 ---
 
@@ -508,6 +537,10 @@ Lokálně: zkopírovat `.env.example` do `.env.local` a vyplnit. Na Vercel: Sett
 NEXT_PUBLIC_SITE_URL=https://www.jdemevibit.cz
 NEXT_PUBLIC_LINKEDIN_URL=https://linkedin.com/in/...
 NEXT_PUBLIC_FORMSPREE_FORM_ID=xkovrywy
+# Volitelně – ukládání zpráv do Airtable:
+# AIRTABLE_API_KEY=pat...
+# AIRTABLE_BASE_ID=app...
+# AIRTABLE_TABLE_CONTACTS=Zprávy
 ```
 Bez `NEXT_PUBLIC_FORMSPREE_FORM_ID` formulář na produkci nebude fungovat.
 
@@ -693,14 +726,15 @@ const newUseCase: UseCase = {
 
 ## ✅ Checklist před deployem
 
-- [ ] Environment variables nastavené (včetně `NEXT_PUBLIC_FORMSPREE_FORM_ID` na Vercel)
+- [ ] Environment variables nastavené (včetně `NEXT_PUBLIC_FORMSPREE_FORM_ID` na Vercel; pokud používáte Airtable, také `AIRTABLE_API_KEY`, `AIRTABLE_BASE_ID`, `AIRTABLE_TABLE_CONTACTS`)
 - [ ] `.env.local` v `.gitignore`
 - [ ] Security headers testovány
 - [ ] CSP validován
 - [ ] SEO metadata zkontrolováno
 - [ ] Structured data validováno
 - [ ] robots.txt a sitemap.xml funkční
-- [ ] Kontaktní formulář: odeslání přes `/api/contact` a doručení do Formspree ověřeno
+- [ ] Kontaktní formulář: odeslání přes `/api/contact` a doručení do Formspree ověřeno (lokálně i na produkci)
+- [ ] Produkce: po deployi odeslat zkušební zprávu na živém webu a zkontrolovat e-mail (Formspree) a záznam v Airtable (pokud je Airtable zapnutý)
 - [ ] Performance testován (Lighthouse 90+)
 - [ ] Custom domain nastaven
 - [ ] SSL certifikát aktivní

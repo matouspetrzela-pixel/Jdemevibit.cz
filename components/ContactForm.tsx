@@ -78,11 +78,25 @@ export function ContactForm() {
               body: data,
               headers: { Accept: "application/json" },
             });
+            const result = await response.json().catch(() => ({}));
             if (response.ok) {
-              setFormStatus("Zpráva byla úspěšně odeslána 👍");
+              if (result.airtableSaved === false) {
+                setFormStatus(
+                  "Zpráva byla odeslána na váš email. Nepodařilo se ji uložit do databáze – zkontrolujte prosím nastavení."
+                );
+              } else {
+                setFormStatus("Zpráva byla úspěšně odeslána 👍");
+              }
               form.reset();
             } else {
-              setFormStatus("Odeslání se nepovedlo. Zkuste to prosím znovu.");
+              const errorMsg =
+                result?.error ||
+                (response.status === 429
+                  ? "Příliš mnoho odeslání, zkuste to za chvíli."
+                  : response.status >= 500
+                    ? "Dočasná chyba. Zkuste to prosím později."
+                    : "Odeslání se nepovedlo. Zkuste to prosím znovu.");
+              setFormStatus(errorMsg);
             }
           } catch {
             setFormStatus("Chyba připojení. Zkuste to znovu.");
@@ -163,7 +177,12 @@ export function ContactForm() {
           {sending ? "Odesílám…" : "Odeslat"}
         </button>
 
-        <p id="form-status" className="mt-4 min-h-[1.5rem] text-white/80 text-sm">
+        <p
+          id="form-status"
+          className="mt-4 min-h-[1.5rem] text-white/80 text-sm"
+          role="status"
+          aria-live="polite"
+        >
           {formStatus}
         </p>
       </form>
