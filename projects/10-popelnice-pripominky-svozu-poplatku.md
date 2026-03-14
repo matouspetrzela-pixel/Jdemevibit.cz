@@ -1,7 +1,7 @@
 ---
 id: "10"
 title: "Aplikace pro svoz komunálního odpadu"
-description: "PWA pro občany: přehled termínů svozu komunálního a BIO odpadu, aktuální obecní poplatky a e-mailové připomínky. Node.js, Express, SQLite, nasazeno na Render."
+description: "Jedna aplikace pro občany: kdy vyvézt koš, kdy platit. Svozy i poplatky na jednom místě, připomínky e-mailem."
 technologies:
   - "Node.js"
   - "TypeScript"
@@ -14,31 +14,11 @@ timeSpent: "Průběžně"
 status: "Veřejný"
 category: "WEB"
 createdAt: "2026-03-09"
-image: "/projects/10-popelnice.png"
 businessBenefit: "Jedna aplikace pro občany – svozy i poplatky, instalace na mobil bez obchodu, e-mailové připomínky."
 ---
 
 # Aplikace pro svoz komunálního odpadu
 
-Progresivní webová aplikace (PWA) pro občany obce: přehled termínů svozu komunálního a BIO odpadu, kalendář svozů, aktuální obecní poplatky v daném měsíci a e-mailové připomínky den před svozem nebo před začátkem platebního období.
-
-## Funkce
-
-- **Kdy co sveze?** – nejbližší svozy s odpočtem dní, kalendář měsíce s vyznačením komunál/BIO.
-- **Poplatky obce** – aktivní a brzy nadcházející poplatky (komunální odpad, vodné a stočné, paušální stočné, pes, pronájem pozemku) s platebními obdobími a poznámkami.
-- **Nastavení** – e-mail domácnosti, další příjemci připomínek, testovací e-mail.
-- **PWA** – instalace na plochu (Android, iOS), offline fallback, bezpečnostní hlavičky pro Chrome/Play Protect a Apple.
-
-## Technologie
-
-- **Backend:** Node.js, Express, TypeScript, SQLite (better-sqlite3), Nodemailer (Gmail SMTP), Helmet (CSP a bezpečnostní hlavičky).
-- **Frontend:** statický HTML/CSS/JS, PWA manifest, Service Worker (cache-first pro statiku, network pro API).
-- **Nasazení:** Render (backend + statický frontend na jedné URL). Volitelně frontend na Vercelu s API_BASE na Render.
-
-## Čas
-
-Průběžný vývoj a údržba.
-
-## Status
+Jedna aplikace pro občany obce: přehled svozů komunálu a BIO, kalendář na měsíc dopředu a aktuální poplatky v jednom přehledu. E-mailová připomínka přijde den před svozem nebo před začátkem platby. Jde ji přidat na plochu telefonu jako aplikaci, bez obchodu.
 
 Pouze pro osobně poskytnutý přístup.
