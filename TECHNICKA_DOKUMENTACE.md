@@ -440,32 +440,23 @@ interface UseCase extends BaseContent {
 
 ### Sekce Projekty (Projekty)
 
-**Účel:** Na homepage se zobrazuje sekce „Projekty“ s kartami projektů (název, popis, technologie, odkaz, náhledový obrázek). Data se načítají z Markdown souborů, ne z CMS.
+**Účel:** Na homepage se zobrazuje sekce „Projekty“ s kartami projektů (název, popis, technologie; volitelně odkaz na živou aplikaci a náhledový obrázek). Data se načítají z Markdown souborů, ne z CMS.
 
 **Umístění:**
 - **Markdown:** `projects/*.md` – každý projekt jeden soubor (např. `10-popelnice-pripominky-svozu-poplatku.md`).
-- **Obrázky:** `public/projects/` – náhledy ve formátu PNG nebo SVG (např. `10-popelnice.png`). Cesta v frontmatter: `image: "/projects/10-popelnice.png"`.
+- **Obrázky (volitelně):** `public/projects/` – náhledy ve formátu PNG nebo SVG. Cesta v frontmatter: `image: "/projects/<id>-<nazev>.png"`. Bez `image` se v modalu nezobrazuje náhled.
 - **Načítání:** `lib/projects.ts` – funkce `getProjects()` čte všechny `.md` v `projects/`, parsuje frontmatter (gray-matter) a tělo jako `fullDescription`. Projekty se řadí podle číselného `id`.
 
-**Frontmatter projektu (povinná pole):**
-- `id` – řetězec (např. `"10"`), slouží i k řazení
-- `title` – název projektu (zobrazen na kartě)
-- `description` – krátký popis (jedna věta)
-- `technologies` – pole řetězců (např. Node.js, TypeScript, PWA)
-- `timeSpent` – odhad času (např. „Průběžně“, „1 den“)
-- `status` – `"Veřejný"` nebo `"PROTOTYP"`
-- `category` – `"WEB"` nebo `"PROTOTYPE"`
-- `url` – odkaz na živou aplikaci (volitelné)
-- `image` – cesta k náhledu, např. `"/projects/10-popelnice.png"` (volitelné)
-- `businessBenefit` – business přínos (volitelné, zobrazen na kartě)
-- `createdAt` – datum (volitelné)
+**Frontmatter projektu:**
+- **Povinná pole:** `id`, `title`, `description`, `technologies`, `timeSpent`, `status`, `category`
+- **Volitelná:** `url` (odkaz na živou aplikaci – neuveden = na kartě není odkaz), `image` (náhled v modalu – neuveden = bez obrázku), `businessBenefit`, `createdAt`
 
 **Přidání nového projektu:**
-1. Vytvořit soubor `projects/<id>-<slug>.md` s YAML frontmatter a tělem (nadpis H1, funkce, technologie, status).
-2. Přidat náhled do `public/projects/<id>-<nazev>.png` (nebo `.svg`) a v frontmatter uvést `image: "/projects/<id>-<nazev>.png"`.
+1. Vytvořit soubor `projects/<id>-<slug>.md` s YAML frontmatter a krátkým tělem (nadpis H1, pár vět – text má inspirovat, ne odrazovat).
+2. Volitelně: přidat náhled do `public/projects/<id>-<nazev>.png` (nebo `.svg`) a v frontmatter uvést `image: "/projects/<id>-<nazev>.png"`.
 3. Po uložení se projekt zobrazí na homepage po obnovení stránky (dev i po deployi).
 
-**Příklad projektu:** Aplikace pro svoz komunálního odpadu (Popelnice) – PWA pro občany, termíny svozů a obecní poplatky, Node.js/Express/SQLite, nasazeno na Render. Soubor: `projects/10-popelnice-pripominky-svozu-poplatku.md`, obrázek: `public/projects/10-popelnice.png`.
+**Příklad projektu:** Aplikace pro svoz komunálního odpadu (Popelnice) – soubor `projects/10-popelnice-pripominky-svozu-poplatku.md`. Bez `url` a bez `image` (pouze osobně poskytnutý přístup). Popis stručný: kdy vyvézt svozovou popelnici, kdy platit obecní poplatky, notifikace e-mailem den předem.
 
 ---
 
