@@ -1,7 +1,7 @@
 ---
 id: "10"
 title: "Aplikace pro svoz komunálního odpadu"
-description: "Jedna aplikace pro občany: kdy vyvézt koš, kdy platit. Svozy i poplatky na jednom místě, připomínky e-mailem."
+description: "Jedna aplikace pro občany: kdy vyvézt svozovou popelnici, kdy platit obecní poplatky. Svozy i poplatky na jednom místě, notifikace e-mailem den předem."
 technologies:
   - "Node.js"
   - "TypeScript"
@@ -19,6 +19,6 @@ businessBenefit: "Jedna aplikace pro občany – svozy i poplatky, instalace na 
 
 # Aplikace pro svoz komunálního odpadu
 
-Jedna aplikace pro občany obce: přehled svozů komunálu a BIO, kalendář na měsíc dopředu a aktuální poplatky v jednom přehledu. E-mailová připomínka přijde den před svozem nebo před začátkem platby. Jde ji přidat na plochu telefonu jako aplikaci, bez obchodu.
+Jedna aplikace pro občany: kdy vyvézt svozovou popelnici, kdy platit obecní poplatky. Svozy i poplatky na jednom místě, notifikace e-mailem den předem.
 
 Pouze pro osobně poskytnutý přístup.
