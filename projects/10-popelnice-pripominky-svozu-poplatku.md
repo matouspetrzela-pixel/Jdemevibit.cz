@@ -14,7 +14,6 @@ timeSpent: "Průběžně"
 status: "Veřejný"
 category: "WEB"
 createdAt: "2026-03-09"
-url: "https://popelnice.onrender.com"
 image: "/projects/10-popelnice.png"
 businessBenefit: "Jedna aplikace pro občany – svozy i poplatky, instalace na mobil bez obchodu, e-mailové připomínky."
 ---
@@ -42,4 +41,4 @@ Průběžný vývoj a údržba.
 
 ## Status
 
-Veřejný – v provozu na [popelnice.onrender.com](https://popelnice.onrender.com).
+Pouze pro osobně poskytnutý přístup.
