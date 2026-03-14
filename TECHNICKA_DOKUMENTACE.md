@@ -47,8 +47,11 @@ jdemevibit-web/
 │   │   └── [slug]/page.tsx    # Dynamický nástroj
 │   ├── o-mne/
 │   │   └── page.tsx            # O mně stránka
-│   └── kontakt/
-│       └── page.tsx            # Kontakt stránka
+│   ├── kontakt/
+│   │   └── page.tsx            # Kontakt stránka
+│   └── api/
+│       ├── contact/route.ts    # POST – Formspree + Airtable
+│       └── og/route.tsx        # OG image (Edge)
 ├── components/
 │   ├── Header.tsx              # Hlavička s navigací
 │   ├── Hero.tsx                # Hero sekce
@@ -63,6 +66,8 @@ jdemevibit-web/
 │   ├── content-types.ts        # Content datový model
 │   └── projects.ts             # Projekty data
 ├── public/                     # Statické soubory
+├── scripts/
+│   └── airtable-diagnose.mjs   # Diagnostika Airtable (env, meta, POST)
 ├── styles/                     # Další styly (volitelné)
 ├── next.config.ts              # Next.js konfigurace
 ├── tailwind.config.ts          # Tailwind konfigurace
@@ -433,6 +438,35 @@ interface UseCase extends BaseContent {
 - `getContentBySlug(slug)` - content podle slug
 - `getContentByCategory(category)` - content podle kategorie
 
+### Sekce Projekty (Projekty)
+
+**Účel:** Na homepage se zobrazuje sekce „Projekty“ s kartami projektů (název, popis, technologie, odkaz, náhledový obrázek). Data se načítají z Markdown souborů, ne z CMS.
+
+**Umístění:**
+- **Markdown:** `projects/*.md` – každý projekt jeden soubor (např. `10-popelnice-pripominky-svozu-poplatku.md`).
+- **Obrázky:** `public/projects/` – náhledy ve formátu PNG nebo SVG (např. `10-popelnice.png`). Cesta v frontmatter: `image: "/projects/10-popelnice.png"`.
+- **Načítání:** `lib/projects.ts` – funkce `getProjects()` čte všechny `.md` v `projects/`, parsuje frontmatter (gray-matter) a tělo jako `fullDescription`. Projekty se řadí podle číselného `id`.
+
+**Frontmatter projektu (povinná pole):**
+- `id` – řetězec (např. `"10"`), slouží i k řazení
+- `title` – název projektu (zobrazen na kartě)
+- `description` – krátký popis (jedna věta)
+- `technologies` – pole řetězců (např. Node.js, TypeScript, PWA)
+- `timeSpent` – odhad času (např. „Průběžně“, „1 den“)
+- `status` – `"Veřejný"` nebo `"PROTOTYP"`
+- `category` – `"WEB"` nebo `"PROTOTYPE"`
+- `url` – odkaz na živou aplikaci (volitelné)
+- `image` – cesta k náhledu, např. `"/projects/10-popelnice.png"` (volitelné)
+- `businessBenefit` – business přínos (volitelné, zobrazen na kartě)
+- `createdAt` – datum (volitelné)
+
+**Přidání nového projektu:**
+1. Vytvořit soubor `projects/<id>-<slug>.md` s YAML frontmatter a tělem (nadpis H1, funkce, technologie, status).
+2. Přidat náhled do `public/projects/<id>-<nazev>.png` (nebo `.svg`) a v frontmatter uvést `image: "/projects/<id>-<nazev>.png"`.
+3. Po uložení se projekt zobrazí na homepage po obnovení stránky (dev i po deployi).
+
+**Příklad projektu:** Aplikace pro svoz komunálního odpadu (Popelnice) – PWA pro občany, termíny svozů a obecní poplatky, Node.js/Express/SQLite, nasazeno na Render. Soubor: `projects/10-popelnice-pripominky-svozu-poplatku.md`, obrázek: `public/projects/10-popelnice.png`.
+
 ---
 
 ## 📬 Kontaktní formulář a Formspree
@@ -443,13 +477,21 @@ Odeslání zprávy neprobíhá přímo z prohlížeče na Formspree (kvůli blok
 
 1. **Prohlížeč** – uživatel vyplní formulář a klikne na „Odeslat“.
 2. **Klientský kód** (`components/ContactForm.tsx`) – `fetch("POST", "/api/contact", FormData)` s poli `name`, `email`, `message`, `_subject`, `_replyto`, `_gotcha`.
-3. **API route** (`app/api/contact/route.ts`) – přijme POST, pošle data na Formspree a při úspěchu zároveň zapíše záznam do Airtable (pokud jsou nastavené `AIRTABLE_API_KEY` a `AIRTABLE_BASE_ID`).
+3. **API route** (`app/api/contact/route.ts`) – přijme POST, ověří vstup (validace), zkontroluje rate limit, pošle data na Formspree a při úspěchu zároveň zapíše záznam do Airtable (pokud jsou nastavené `AIRTABLE_API_KEY` a `AIRTABLE_BASE_ID`).
 4. **Formspree** – zpracuje odeslání a pošle notifikaci na váš email.
-5. **Airtable** (volitelně) – ukládá zprávy do tabulky (např. „Zprávy“) pro další práci s kontakty a budování komunity.
+5. **Airtable** (volitelně) – ukládá kontakty do tabulky (např. Name + Email) pro budování komunity.
 
 **Soubory:**
-- `components/ContactForm.tsx` – formulář (id `contact-form`), stav `form-status`, tlačítko volá `formRef.current.requestSubmit()`.
-- `app/api/contact/route.ts` – proxy na Formspree + zápis do Airtable; používá `NEXT_PUBLIC_FORMSPREE_FORM_ID`, volitelně `AIRTABLE_*`.
+- `components/ContactForm.tsx` – formulář (id `contact-form`), stav `form-status` s `role="status"` a `aria-live="polite"`, tlačítko volá `formRef.current.requestSubmit()`.
+- `app/api/contact/route.ts` – validace, rate limit, proxy na Formspree, zápis do Airtable; používá `NEXT_PUBLIC_FORMSPREE_FORM_ID`, volitelně `AIRTABLE_*`.
+- `scripts/airtable-diagnose.mjs` – diagnostický skript pro ověření Airtable připojení (spustit: `node scripts/airtable-diagnose.mjs` z kořene `jdemevibit-web`).
+
+### Validace a ochrana
+
+- **Backend validace:** Povinná pole (jméno, email, zpráva), formát emailu (regex), max. délka jména 200 znaků, zprávy 2000 znaků. Při neplatných datech API vrací `400` a JSON `{ error: "…" }` (česky).
+- **Rate limiting:** Max. 5 požadavků za 15 minut na IP (in-memory; na Vercelu platí v rámci jedné instance). Při překročení odpověď `429` s hláškou „Příliš mnoho odeslání, zkuste to za chvíli.“
+- **Zpětná vazba Airtable:** Odpověď API obsahuje `airtableSaved: true | false | null`. Když zápis do Airtable selže, uživatel vidí: „Zpráva byla odeslána na váš email. Nepodařilo se ji uložit do databáze – zkontrolujte prosím nastavení.“
+- **Chybové hlášky:** Podle stavu Formspree/API se zobrazují konkrétní zprávy (429 = rate limit, 5xx = dočasná chyba serveru, 400 = validace).
 
 ### Environment variables
 
@@ -460,9 +502,15 @@ Odeslání zprávy neprobíhá přímo z prohlížeče na Formspree (kvůli blok
 | `NEXT_PUBLIC_LINKEDIN_URL` | volitelné | Odkaz na LinkedIn v sekci Kontakt. |
 | `AIRTABLE_API_KEY` | volitelné | Airtable Personal Access Token (začíná `pat…`). Bez něj se zprávy neukládají do Airtable. |
 | `AIRTABLE_BASE_ID` | volitelné | ID Airtable base (začíná `app…`). |
-| `AIRTABLE_TABLE_CONTACTS` | volitelné | Název tabulky pro zprávy (výchozí: `Zprávy`). Sloupce v tabulce: Jméno, Email, Zpráva. |
+| `AIRTABLE_TABLE_CONTACTS` | volitelné | Název tabulky pro zprávy (výchozí: `Zprávy`). |
+| `AIRTABLE_FIELD_NAME` | volitelné | Název sloupce pro jméno (výchozí: `Jméno`). Prázdné = pole neposílat. |
+| `AIRTABLE_FIELD_EMAIL` | volitelné | Název sloupce pro email (výchozí: `Email`). Musí přesně odpovídat Airtable. |
+| `AIRTABLE_FIELD_MESSAGE` | volitelné | Název sloupce pro zprávu. **Prázdná hodnota** = zprávu do Airtable neposílat (jen Name + Email). Výchozí: `Zpráva`. |
+| `AIRTABLE_FIELD_PHONE` | volitelné | Název sloupce pro telefon (formulář pole nemá; posílá se jen pokud přidáte). |
+| `AIRTABLE_FIELD_SOURCE` | volitelné | Název sloupce pro zdroj (např. Single select). |
+| `AIRTABLE_SOURCE_VALUE` | volitelné | Hodnota zdroje (např. `web`). Musí existovat v Airtable u daného pole. Prázdné = pole Source neposílat. |
 
-Lokálně: zkopírovat `.env.example` do `.env.local` a vyplnit. Na Vercel: Settings → Environment Variables (Production).
+Lokálně: zkopírovat `.env.example` do `.env.local` a vyplnit. **Na Vercel:** Settings → Environment Variables (Production) – nastavit všechny potřebné proměnné včetně Airtable a po uložení spustit **Redeploy**, aby se env načetly.
 
 ### Formspree (free verze)
 
@@ -472,22 +520,27 @@ Lokálně: zkopírovat `.env.example` do `.env.local` a vyplnit. Na Vercel: Sett
   - Ve složce Spam zvolit „Není spam“ u jedné zprávy od Formspree.
   - Přidat odesílatele (Formspree) do kontaktů v Gmailu/Outlooku.
   - V nastavení formuláře ve Formspree zkontrolovat, že je nastavený správný příjemce (Email to receive submissions).
-- **CAPTCHA:** Pokud ve Formspree zapnete CAPTCHA, musí frontend posílat platný reCAPTCHA token (pole `g-recaptcha-response`). Aktuální implementace CAPTCHA nepoužívá – při zapnuté CAPTCHA by Formspree mohl odeslání odmítat; pro free bez reCAPTCHA nechte CAPTCHA vypnutou a používejte např. Formshield.
+- **CAPTCHA:** Pokud ve Formspree zapnete CAPTCHA, musí frontend posílat platný reCAPTCHA token. Aktuální implementace CAPTCHA nepoužívá – pro free bez reCAPTCHA nechte CAPTCHA vypnutou.
 
 ### Chybové stavy
 
-- **„Chyba připojení. Zkuste to znovu.“** – `fetch("/api/contact")` selhal (síť, výpadek). Odesílání přes `/api/contact` minimalizuje blokování z prohlížeče.
-- **„Odeslání se nepovedlo.“** – Formspree vrátil ne-OK (např. 422). Zkontrolovat Formspree dashboard a nastavení formuláře.
+- **„Chyba připojení. Zkuste to znovu.“** – `fetch("/api/contact")` selhal (síť, výpadek).
+- **„Odeslání se nepovedlo.“** – Formspree nebo API vrátilo ne-OK. Zkontrolovat Formspree dashboard a nastavení formuláře.
+- **„Příliš mnoho odeslání, zkuste to za chvíli.“** – Rate limit (429).
+- **„Dočasná chyba. Zkuste to prosím později.“** – Chyba serveru (5xx).
+- **Validace (400):** Konkrétní hláška (např. „Jméno je povinné.“, „Zadejte platnou e-mailovou adresu.“).
 
 ### Airtable (ukládání zpráv)
 
-Pokud jsou nastavené `AIRTABLE_API_KEY` a `AIRTABLE_BASE_ID`, API po úspěšném odeslání na Formspree zapíše záznam do zadané Airtable tabulky.
+Pokud jsou nastavené `AIRTABLE_API_KEY` a `AIRTABLE_BASE_ID`, API po úspěšném odeslání na Formspree zapíše záznam do zadané Airtable tabulky. Názvy sloupců se mapují podle env (`AIRTABLE_FIELD_NAME`, `AIRTABLE_FIELD_EMAIL`, `AIRTABLE_FIELD_MESSAGE` atd.).
 
-**Povinná struktura tabulky:** Název tabulky dle `AIRTABLE_TABLE_CONTACTS` (výchozí `Zprávy`). Sloupce musí mít **přesně** tyto názvy: **Jméno**, **Email**, **Zpráva** (typy: Single line text, Email, Long text dle libosti).
+**Struktura tabulky:** Názvy sloupců musí **přesně** odpovídat hodnotám v env (v Airtable rozlišují velikost písmen). Můžete mít např. jen **Name** a **Email** – pak nastavte `AIRTABLE_FIELD_MESSAGE=` (prázdné) a zpráva se do Airtable neposílá.
 
-Při chybě zápisu do Airtable se chyba pouze zaloguje v terminálu (`[api/contact] Airtable zápis selhal`) – uživateli se vrátí úspěch (zpráva už byla odeslána přes Formspree).
+Při chybě zápisu do Airtable se chyba zaloguje a uživatel uvidí: „Zpráva byla odeslána na váš email. Nepodařilo se ji uložit do databáze – zkontrolujte prosím nastavení.“
 
-**Chyba 403 (INVALID_PERMISSIONS_OR_MODEL_NOT_FOUND):** Token nemá oprávnění k base nebo tabulka nebyla nalezena. Zkontrolujte: (1) Personal Access Token má scope `data.records:write` a v „Access“ je vybraná příslušná base; (2) `AIRTABLE_BASE_ID` odpovídá base (URL base obsahuje `app...`); (3) `AIRTABLE_TABLE_CONTACTS` je přesný název záložky tabulky v Airtable (ne Table ID).
+**Produkce (Vercel):** Aby záznamy chodily do Airtable na živém webu, musí být všechny Airtable proměnné nastavené v **Vercel → Settings → Environment Variables** pro prostředí **Production** a po jejich přidání/změně je nutné spustit **Redeploy** deploymentu.
+
+**Chyba 403 (INVALID_PERMISSIONS_OR_MODEL_NOT_FOUND):** Token nemá oprávnění k base nebo tabulka nebyla nalezena. Zkontrolujte Personal Access Token (scope `data.records:write`), `AIRTABLE_BASE_ID` a `AIRTABLE_TABLE_CONTACTS`. **Chyba 422 (UNKNOWN_FIELD_NAME):** Název sloupce v env neodpovídá Airtable – opravte `AIRTABLE_FIELD_*` podle přesných názvů v tabulce. Diagnostika: `node scripts/airtable-diagnose.mjs`.
 
 ---
 
@@ -537,12 +590,19 @@ Při chybě zápisu do Airtable se chyba pouze zaloguje v terminálu (`[api/cont
 NEXT_PUBLIC_SITE_URL=https://www.jdemevibit.cz
 NEXT_PUBLIC_LINKEDIN_URL=https://linkedin.com/in/...
 NEXT_PUBLIC_FORMSPREE_FORM_ID=xkovrywy
-# Volitelně – ukládání zpráv do Airtable:
-# AIRTABLE_API_KEY=pat...
-# AIRTABLE_BASE_ID=app...
-# AIRTABLE_TABLE_CONTACTS=Zprávy
+NEXT_PUBLIC_GA_ID=G-...
+# Airtable – pro zápis kontaktů z formuláře (volitelné):
+AIRTABLE_API_KEY=pat...
+AIRTABLE_BASE_ID=app...
+AIRTABLE_TABLE_CONTACTS=Table1
+AIRTABLE_FIELD_NAME=Name
+AIRTABLE_FIELD_EMAIL=Email
+AIRTABLE_FIELD_MESSAGE=          # prázdné = neposílat zprávu do Airtable
+# AIRTABLE_FIELD_PHONE=Phone
+# AIRTABLE_FIELD_SOURCE=Source
+# AIRTABLE_SOURCE_VALUE=web
 ```
-Bez `NEXT_PUBLIC_FORMSPREE_FORM_ID` formulář na produkci nebude fungovat.
+Bez `NEXT_PUBLIC_FORMSPREE_FORM_ID` formulář na produkci nebude fungovat. Po přidání nebo změně env proměnných je nutné spustit **Redeploy** (Deployments → ⋯ u posledního deploymentu → Redeploy).
 
 ### Vercel – ostatní
 
@@ -726,14 +786,15 @@ const newUseCase: UseCase = {
 
 ## ✅ Checklist před deployem
 
-- [ ] Environment variables nastavené (včetně `NEXT_PUBLIC_FORMSPREE_FORM_ID` na Vercel; pokud používáte Airtable, také `AIRTABLE_API_KEY`, `AIRTABLE_BASE_ID`, `AIRTABLE_TABLE_CONTACTS`)
+- [ ] Environment variables nastavené (včetně `NEXT_PUBLIC_FORMSPREE_FORM_ID` na Vercel; pokud používáte Airtable, také `AIRTABLE_API_KEY`, `AIRTABLE_BASE_ID`, `AIRTABLE_TABLE_CONTACTS`, `AIRTABLE_FIELD_NAME`, `AIRTABLE_FIELD_EMAIL`, `AIRTABLE_FIELD_MESSAGE` dle struktury tabulky)
+- [ ] Po změně env na Vercel spuštěn **Redeploy**
 - [ ] `.env.local` v `.gitignore`
 - [ ] Security headers testovány
 - [ ] CSP validován
 - [ ] SEO metadata zkontrolováno
 - [ ] Structured data validováno
 - [ ] robots.txt a sitemap.xml funkční
-- [ ] Kontaktní formulář: odeslání přes `/api/contact` a doručení do Formspree ověřeno (lokálně i na produkci)
+- [ ] Kontaktní formulář: odeslání přes `/api/contact`, doručení do Formspree a zápis do Airtable ověřeno (lokálně i na produkci)
 - [ ] Produkce: po deployi odeslat zkušební zprávu na živém webu a zkontrolovat e-mail (Formspree) a záznam v Airtable (pokud je Airtable zapnutý)
 - [ ] Performance testován (Lighthouse 90+)
 - [ ] Custom domain nastaven
@@ -743,5 +804,5 @@ const newUseCase: UseCase = {
 
 ---
 
-**Poslední aktualizace:** 2025  
-**Verze:** 1.0.0
+**Poslední aktualizace:** 2026  
+**Verze:** 1.1.0
