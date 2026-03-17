@@ -1,13 +1,14 @@
 "use client";
 
 import { Project } from "@/lib/projects";
-import Image from "next/image";
 import { useEffect } from "react";
 
 interface UseCaseModalProps {
   project: Project | null;
   onClose: () => void;
 }
+
+const IS_DEV = process.env.NODE_ENV === "development";
 
 export function UseCaseModal({ project, onClose }: UseCaseModalProps) {
   // ESC klávesa pro zavření
@@ -52,22 +53,63 @@ export function UseCaseModal({ project, onClose }: UseCaseModalProps) {
           </button>
         </div>
 
-        {/* Zvětšený screenshot */}
-        <div className="relative w-full h-48 md:h-64 lg:h-80 bg-white/5">
-          {project.image ? (
-            <Image
-              src={project.image}
-              alt={project.title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 800px"
-              priority
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-white/30">
-              Náhled projektu
+        {/* Karta projektu (stejný princip náhledu jako v mřížce) */}
+        <div className="p-4 md:p-6 border-b border-white/10">
+          <div className="rounded-2xl overflow-hidden bg-white/5 border border-white/10 shadow-sm max-w-2xl mx-auto">
+            <div className="relative w-full aspect-[16/9] min-h-[12rem] overflow-hidden bg-gradient-to-b from-[#0f1217] to-[#1a1f26] border-b border-white/5">
+              {project.image && (
+                <img
+                  src={project.image}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 w-full h-full object-cover blur-xl scale-110 opacity-35"
+                />
+              )}
+              <div className="relative w-full h-full p-3 flex items-center justify-center">
+                {project.image ? (
+                  <img
+                    src={project.image}
+                    alt={`Náhled: ${project.title}`}
+                    className="w-full h-full object-contain rounded-xl shadow-[0_6px_20px_rgba(0,0,0,0.25)]"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-white/30 text-sm rounded-xl bg-white/5">
+                    Náhled
+                  </div>
+                )}
+              </div>
+              <div className="absolute top-3 right-3">
+                <span
+                  className={`inline-block px-3 py-1 rounded-full text-[0.7rem] font-semibold tracking-wide uppercase ${
+                    project.status === "Veřejný"
+                      ? "bg-emerald-500/20 text-emerald-300"
+                      : "bg-[#ef2c28]/15 text-[#ef2c28]"
+                  }`}
+                >
+                  {project.status === "Veřejný" ? "PRODUKCE" : "PROTOTYP"}
+                </span>
+              </div>
             </div>
-          )}
+            <div className="p-4 flex flex-col gap-2">
+              <h3 className="text-lg font-bold text-white">{project.title}</h3>
+              <p className="text-white/70 text-sm line-clamp-2">{project.description}</p>
+              <div className="flex flex-wrap gap-2">
+                {project.technologies.slice(0, 4).map((tech) => (
+                  <span
+                    key={tech}
+                    className="px-2.5 py-1 bg-white/10 rounded-md text-xs text-white/80"
+                  >
+                    {tech}
+                  </span>
+                ))}
+                {project.technologies.length > 4 && (
+                  <span className="px-2.5 py-1 bg-white/10 rounded-md text-xs text-white/60">
+                    +{project.technologies.length - 4}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Detailní informace */}
@@ -137,19 +179,33 @@ export function UseCaseModal({ project, onClose }: UseCaseModalProps) {
             </div>
           </div>
 
-          {/* Tlačítko Otevřít web */}
-          {project.url && (
-            <div className="pt-4">
-              <a
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium"
-                onClick={(e) => e.stopPropagation()}
-              >
-                Otevřít web
-                <span>→</span>
-              </a>
+          {/* Odkazy: v DEV ukazujeme i lokální URL, v produkci jen web */}
+          {(project.urlLocal || project.url) && (
+            <div className="pt-4 flex flex-wrap gap-3">
+              {IS_DEV && project.urlLocal && (
+                  <a
+                    href={project.urlLocal}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#7b3beb] text-white rounded-lg hover:bg-[#8b4bfb] transition-colors font-medium"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Otevřít lokálně
+                    <span>→</span>
+                  </a>
+                )}
+              {project.url && (
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Otevřít web
+                  <span>→</span>
+                </a>
+              )}
             </div>
           )}
         </div>

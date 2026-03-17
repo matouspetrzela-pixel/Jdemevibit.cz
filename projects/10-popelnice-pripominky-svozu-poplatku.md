@@ -15,6 +15,7 @@ status: "Veřejný"
 category: "WEB"
 createdAt: "2026-03-09"
 businessBenefit: "Jedna aplikace pro občany – svozy i poplatky, instalace na mobil bez obchodu, e-mailové připomínky."
+image: "/projects/10-popelnice-pripominky.png"
 ---
 
 # Aplikace pro svoz komunálního odpadu

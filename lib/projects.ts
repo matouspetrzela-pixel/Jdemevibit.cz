@@ -13,6 +13,8 @@ export interface Project {
   timeSpent: string;
   status: "Veřejný" | "PROTOTYP";
   url?: string;
+  /** Lokální URL (např. http://localhost:5176) – zobrazí se jen při běhu na localhost */
+  urlLocal?: string;
   image?: string; // Cesta k screenshotu
   businessBenefit?: string; // Business přínos projektu
 }
@@ -28,6 +30,7 @@ interface MarkdownFrontmatter {
   createdAt?: string;
   image?: string;
   url?: string;
+  urlLocal?: string;
   businessBenefit?: string;
 }
 
@@ -93,6 +96,7 @@ function loadProjectsFromPath(projectsDir: string): Project[] {
             timeSpent: frontmatter.timeSpent || "Není uvedeno",
             status,
             url: frontmatter.url,
+            urlLocal: frontmatter.urlLocal,
             image: frontmatter.image,
             businessBenefit: frontmatter.businessBenefit,
           };

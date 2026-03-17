@@ -8,7 +8,7 @@ timeSpent: "10h (víkendový projekt)"
 status: "Interní"
 category: "PROTOTYPE"
 createdAt: "2026-01-25"
-image: "/projects/6-conference-dashboard.svg"
+image: "/projects/6-conference-dashboard.png"
 ---
 
 # Conference Dashboard

@@ -13,6 +13,7 @@ status: "Veřejný"
 category: "WEB"
 createdAt: "2026-02-15"
 url: "https://www.jdemevibit.cz"
+image: "/projects/7-web-jdemevibit-cz.png"
 ---
 
 # Web jdemevibit.cz

@@ -12,7 +12,7 @@ timeSpent: "Krátký projekt (hodiny)"
 status: "Prototyp"
 category: "PROTOTYPE"
 createdAt: "2026-02-17"
-image: "/projects/8-nanobanana-gemini-grafika.svg"
+image: "/projects/8-nanobanana-gemini-grafika.png"
 businessBenefit: "Rychlá tvorba obrázků z popisu, vhodné pro prototypy nebo práci v editoru."
 ---
 

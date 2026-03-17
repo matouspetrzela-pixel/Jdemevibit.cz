@@ -11,7 +11,8 @@ timeSpent: "Krátký projekt (hodiny)"
 status: "Prototyp"
 category: "PROTOTYPE"
 createdAt: "2026-02-26"
-image: "/projects/9-suno-jazz-studio.svg"
+image: "/projects/9-suno-jazz-studio.png"
+urlLocal: "http://localhost:5176"
 businessBenefit: "Rychlá příprava kompletních podkladů pro AI hudební generátory – texty, styl, tagy i aranžmá na jedno kliknutí."
 ---
 

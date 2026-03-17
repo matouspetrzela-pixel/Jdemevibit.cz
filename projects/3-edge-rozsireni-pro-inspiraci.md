@@ -10,7 +10,7 @@ timeSpent: "Není uvedeno"
 status: "Interní"
 category: "PROTOTYPE"
 createdAt: "2026-01-25"
-image: "/projects/3-edge-rozsireni-pro-inspiraci.svg"
+image: "/projects/3-edge-rozsireni-pro-inspiraci.png"
 ---
 
 # Edge rozšíření pro inspiraci

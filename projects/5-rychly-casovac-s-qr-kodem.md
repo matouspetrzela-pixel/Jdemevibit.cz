@@ -10,7 +10,7 @@ timeSpent: "Pár minut"
 status: "Veřejný"
 category: "WEB"
 createdAt: "2026-01-25"
-image: "/projects/5-rychly-casovac-s-qr-kodem.svg"
+image: "/projects/5-rychly-casovac-s-qr-kodem.png"
 ---
 
 # Rychlý časovač s QR kódem

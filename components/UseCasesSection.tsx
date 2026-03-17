@@ -33,15 +33,15 @@ export function UseCasesSection({ projects }: UseCasesSectionProps) {
   return (
     <>
       <section id="use-cases" className="container mx-auto px-4 py-16 md:py-24">
-        <div className="flex items-center justify-between mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#ffffff]">
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-10 md:mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#ffffff] tracking-tight">
             PROJEKTY
           </h2>
-          <p className="text-[#ffffff] opacity-60 text-sm md:text-base">
+          <p className="text-[#ffffff] opacity-60 text-sm md:text-base md:text-right">
             Zobrazeno {projects.length} {projects.length === 1 ? "projekt" : projects.length < 5 ? "projekty" : "projektů"}
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {projects.map((project) => (
             <ProjectCard
               key={project.id}
