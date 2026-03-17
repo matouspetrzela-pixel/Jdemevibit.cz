@@ -12,7 +12,7 @@ timeSpent: "Krátký projekt"
 status: "Veřejný"
 category: "PROTOTYPE"
 createdAt: "2026-03-17"
-url: "https://github.com/matouspetrzela-pixel/hra-kamen-nuzky-papir"
+url: "https://hra-kamen-nuzky-papir.vercel.app/"
 businessBenefit: "Ukazuje, jak z jednoduché browser hry vytvořit zapamatovatelný interaktivní projekt s výrazným vizuálním stylem a zvukovou zpětnou vazbou."
 ---
 
