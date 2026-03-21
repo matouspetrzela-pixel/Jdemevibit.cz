@@ -8,8 +8,6 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const title = searchParams.get("title") || "Jdemevibit";
     const tool = searchParams.get("tool") || "";
-    const category = searchParams.get("category") || "use-case";
-
     return new ImageResponse(
       (
         <div
@@ -20,8 +18,9 @@ export async function GET(request: NextRequest) {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "#0f1217",
-            backgroundImage: "linear-gradient(to bottom, #0f1217, #1a1d24)",
+            backgroundColor: "#000000",
+            backgroundImage:
+              "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,240,255,0.12), transparent 55%), radial-gradient(ellipse 60% 40% at 100% 100%, rgba(168,85,247,0.1), transparent 50%)",
           }}
         >
           <div
@@ -78,7 +77,7 @@ export async function GET(request: NextRequest) {
               <span
                 style={{
                   fontSize: "32px",
-                  color: "#ef2c28",
+                  color: "#00f0ff",
                   fontWeight: "700",
                 }}
               >
@@ -93,8 +92,8 @@ export async function GET(request: NextRequest) {
         height: 630,
       }
     );
-  } catch (e: any) {
-    console.log(`${e.message}`);
+  } catch (e: unknown) {
+    console.log(e instanceof Error ? e.message : String(e));
     return new Response(`Failed to generate the image`, {
       status: 500,
     });

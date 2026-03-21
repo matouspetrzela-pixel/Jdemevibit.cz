@@ -2,6 +2,7 @@
 // Používá se pro každou stránku s generateMetadata()
 
 import type { Metadata } from "next";
+import { siteOrigin } from "@/lib/seo";
 
 interface MetadataParams {
   title: string;
@@ -18,8 +19,7 @@ export function generatePageMetadata({
   ogImage,
   noindex = false,
 }: MetadataParams): Metadata {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://jdemevibit.cz";
-  const url = `${baseUrl}${path}`;
+  const url = `${siteOrigin}${path}`;
   const fullTitle = `${title} | Jdemevibit`;
 
   return {
@@ -46,7 +46,7 @@ export function generatePageMetadata({
           ]
         : [
             {
-              url: `${baseUrl}/og-image.jpg`,
+              url: `${siteOrigin}/og-image.jpg`,
               width: 1200,
               height: 630,
               alt: title,
@@ -57,7 +57,7 @@ export function generatePageMetadata({
       card: "summary_large_image",
       title: fullTitle,
       description,
-      images: ogImage ? [ogImage] : [`${baseUrl}/og-image.jpg`],
+      images: ogImage ? [ogImage] : [`${siteOrigin}/og-image.jpg`],
     },
     robots: noindex
       ? {

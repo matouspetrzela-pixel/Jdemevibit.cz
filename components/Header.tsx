@@ -1,37 +1,56 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const linkBase =
+  "font-mono text-xs uppercase tracking-[0.18em] text-zinc-500 transition-colors duration-200 hover:text-[#00f0ff]";
 
 export function Header() {
+  const pathname = usePathname();
+
+  const active = (path: string) =>
+    pathname === path ? "text-[#00f0ff]" : "";
+
+  const navodyActive =
+    pathname?.startsWith("/navody") || pathname?.startsWith("/nastroje")
+      ? "text-[#00f0ff]"
+      : "";
+
   return (
-    <header className="w-full border-b border-white/10">
-      <div className="container mx-auto px-4 py-4">
-        {/* Navigační lišta */}
-        <nav className="flex justify-center md:justify-end" aria-label="Hlavní navigace">
-          <ul className="flex flex-wrap gap-4 md:gap-6 text-xs md:text-sm justify-center md:justify-end">
+    <header className="vc-header sticky top-0 z-[60] border-b border-transparent">
+      <div className="mx-auto flex max-w-7xl justify-center px-5 py-3.5 md:justify-end">
+        <nav aria-label="Hlavní navigace">
+          <ul className="flex flex-wrap justify-center gap-x-2 gap-y-1 md:justify-end md:gap-x-6 md:gap-y-0 lg:gap-x-8">
             <li>
-              <Link href="/" className="text-[#FFFFFF] opacity-90 hover:opacity-100 hover:underline transition-all">
-                Domů
+              <Link href="/" className={`${linkBase} ${active("/")}`}>
+                LABORATOŘ
               </Link>
             </li>
             <li>
-              <Link href="/use-cases" className="text-[#FFFFFF] opacity-90 hover:opacity-100 hover:underline transition-all">
-                Use Cases
+              <Link
+                href="/use-cases"
+                className={`${linkBase} ${active("/use-cases")}`}
+              >
+                USE CASES
               </Link>
             </li>
             <li>
-              <Link href="/navody" className="text-[#FFFFFF] opacity-90 hover:opacity-100 hover:underline transition-all">
-                Návody
+              <Link href="/navody" className={`${linkBase} ${navodyActive}`}>
+                [THE VAULT]
               </Link>
             </li>
             <li>
-              <Link href="/o-mne" className="text-[#FFFFFF] opacity-90 hover:opacity-100 transition-opacity border-b border-[#ef2c28] border-opacity-100">
-                O mně
+              <Link href="/o-mne" className={`${linkBase} ${active("/o-mne")}`}>
+                O MNĚ
               </Link>
             </li>
             <li>
-              <Link href="/kontakt" className="text-[#FFFFFF] opacity-90 hover:opacity-100 hover:underline transition-all">
-                Kontakt
+              <Link
+                href="/kontakt"
+                className={`${linkBase} ${active("/kontakt")}`}
+              >
+                KONTAKT
               </Link>
             </li>
           </ul>

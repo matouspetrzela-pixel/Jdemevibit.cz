@@ -2,13 +2,13 @@ import { notFound } from "next/navigation";
 import { getContentBySlug, type UseCase } from "@/lib/content-types";
 import { generatePageMetadata } from "@/app/seo/generateMetadata";
 import { buildOGImageUrl } from "@/app/seo/ogImage";
-import Image from "next/image";
+import { LabInnerLayout } from "@/components/lab/LabInnerLayout";
+import { GlassPanel } from "@/components/lab/GlassPanel";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-// Generate metadata pro každý use case
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
   const content = getContentBySlug(slug) as UseCase | null;
@@ -22,12 +22,14 @@ export async function generateMetadata({ params }: PageProps) {
     });
   }
 
-  const ogImage = content.ogImage || buildOGImageUrl({
-    title: content.title,
-    tool: content.tools[0],
-    result: content.result.substring(0, 50),
-    category: "use-case",
-  });
+  const ogImage =
+    content.ogImage ||
+    buildOGImageUrl({
+      title: content.title,
+      tool: content.tools[0],
+      result: content.result.substring(0, 50),
+      category: "use-case",
+    });
 
   return generatePageMetadata({
     title: `${content.title} vytvořený za ${content.timeSpent} s AI`,
@@ -46,96 +48,95 @@ export default async function UseCasePage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f1217]">
-      <article className="container mx-auto px-4 py-16 max-w-4xl">
-        {/* H1 podle vzoru */}
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+    <LabInnerLayout>
+      <article>
+        <p className="lab-eyebrow mb-3 text-[#00f0ff]/60">
+          {"// use_case.archive"}
+        </p>
+        <h1 className="lab-section-title mb-8 text-3xl font-bold tracking-[-0.04em] text-white md:text-4xl">
           {content.title} vytvořený za {content.timeSpent} s AI
         </h1>
 
-        {/* TL;DR sekce */}
-        <div className="bg-white/5 border border-white/10 rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold text-white mb-3">TL;DR</h2>
-          <p className="text-white/80">{content.description}</p>
-        </div>
+        <GlassPanel className="mb-10 p-6 md:p-8">
+          <h2 className="lab-section-title mb-3 text-lg font-semibold text-white">
+            TL;DR
+          </h2>
+          <p className="text-zinc-400">{content.description}</p>
+        </GlassPanel>
 
-        {/* Kontext a cíl projektu */}
         <section className="mb-12">
-          <h2 className="text-3xl font-bold text-white mb-4">
+          <h2 className="lab-section-title mb-4 text-2xl font-bold tracking-[-0.04em] text-white">
             Kontext a cíl projektu
           </h2>
-          <div className="text-white/80 space-y-4">
+          <div className="space-y-6 text-zinc-400">
             <div>
-              <h3 className="text-xl font-semibold text-white mb-2">Kontext</h3>
+              <h3 className="lab-section-title mb-2 text-lg font-semibold text-white">
+                Kontext
+              </h3>
               <p>{content.context}</p>
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-white mb-2">Cíl</h3>
+              <h3 className="lab-section-title mb-2 text-lg font-semibold text-white">
+                Cíl
+              </h3>
               <p>{content.goal}</p>
             </div>
           </div>
         </section>
 
-        {/* Použité nástroje */}
         <section className="mb-12">
-          <h2 className="text-3xl font-bold text-white mb-4">
+          <h2 className="lab-section-title mb-4 text-2xl font-bold tracking-[-0.04em] text-white">
             Použité nástroje
           </h2>
           <div className="flex flex-wrap gap-2">
             {content.tools.map((tool) => (
-              <span
-                key={tool}
-                className="px-3 py-1 bg-[#7b3beb]/20 text-[#7b3beb] rounded-lg text-sm"
-              >
+              <span key={tool} className="vc-tag vc-tag--violet">
                 {tool}
               </span>
             ))}
           </div>
         </section>
 
-        {/* Jak probíhal vývoj */}
         <section className="mb-12">
-          <h2 className="text-3xl font-bold text-white mb-4">
+          <h2 className="lab-section-title mb-4 text-2xl font-bold tracking-[-0.04em] text-white">
             Jak probíhal vývoj
           </h2>
-          <div className="text-white/80 space-y-6">
+          <div className="space-y-6 text-zinc-400">
             {content.process.map((step, index) => (
               <div key={index}>
-                <h3 className="text-xl font-semibold text-white mb-2">
+                <h3 className="lab-section-title mb-2 text-lg font-semibold text-white">
                   {content.prompts?.[index] ? "Promptování" : `Krok ${index + 1}`}
                 </h3>
-                {content.prompts?.[index] && (
-                  <div className="bg-white/5 border border-white/10 rounded p-4 mb-3">
-                    <code className="text-sm text-white/70">{content.prompts[index]}</code>
-                  </div>
-                )}
+                {content.prompts?.[index] ? (
+                  <pre className="mb-3 overflow-x-auto rounded-sm border border-white/[0.08] bg-black/50 p-4 font-mono text-sm text-zinc-400">
+                    {content.prompts[index]}
+                  </pre>
+                ) : null}
                 <p>{step}</p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Iterace */}
-        {content.iterations && content.iterations.length > 0 && (
+        {content.iterations && content.iterations.length > 0 ? (
           <section className="mb-12">
-            <h3 className="text-2xl font-semibold text-white mb-4">
+            <h3 className="lab-section-title mb-4 text-xl font-semibold text-white">
               Iterace
             </h3>
-            <ul className="list-disc list-inside text-white/80 space-y-2">
+            <ul className="list-inside list-disc space-y-2 text-zinc-400">
               {content.iterations.map((iteration, index) => (
                 <li key={index}>{iteration}</li>
               ))}
             </ul>
           </section>
-        )}
+        ) : null}
 
-        {/* Co bych dnes udělal jinak */}
         {content.lessonsLearned && content.lessonsLearned.length > 0 ? (
           <section className="mb-12">
-            <h3 className="text-2xl font-semibold text-white mb-4">
+            <h3 className="lab-section-title mb-4 text-xl font-semibold text-white">
               Co bych dnes udělal jinak
             </h3>
-            <ul className="list-disc list-inside text-white/80 space-y-2">
+            <ul className="list-inside list-disc space-y-2 text-zinc-400">
               {content.lessonsLearned.map((lesson, index) => (
                 <li key={index}>{lesson}</li>
               ))}
@@ -143,45 +144,48 @@ export default async function UseCasePage({ params }: PageProps) {
           </section>
         ) : (
           <section className="mb-12">
-            <h3 className="text-2xl font-semibold text-white mb-4">
+            <h3 className="lab-section-title mb-4 text-xl font-semibold text-white">
               Co bych dnes udělal jinak
             </h3>
-            <p className="text-white/80">
+            <p className="text-zinc-400">
               Tato sekce bude doplněna později s konkrétními poznatky z projektu.
             </p>
           </section>
         )}
 
-        {/* Výsledek */}
         <section className="mb-12">
-          <h2 className="text-3xl font-bold text-white mb-4">Výsledek</h2>
-          <div className="text-white/80 space-y-4">
+          <h2 className="lab-section-title mb-4 text-2xl font-bold tracking-[-0.04em] text-white">
+            Výsledek
+          </h2>
+          <div className="space-y-4 text-zinc-400">
             <p>{content.result}</p>
-            {content.url && (
-              <a
-                href={content.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-[#ef2c28] hover:text-[#ff3d35] transition-colors font-medium"
-              >
-                Zobrazit projekt
-                <span>→</span>
-              </a>
-            )}
-            {content.githubUrl && (
-              <a
-                href={content.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-[#7b3beb] hover:text-[#8b4dfb] transition-colors font-medium ml-4"
-              >
-                GitHub
-                <span>→</span>
-              </a>
-            )}
+            <div className="flex flex-wrap gap-4">
+              {content.url ? (
+                <a
+                  href={content.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="vc-text-link inline-flex items-center gap-2 font-mono text-sm font-medium"
+                >
+                  Zobrazit projekt
+                  <span aria-hidden>→</span>
+                </a>
+              ) : null}
+              {content.githubUrl ? (
+                <a
+                  href={content.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="vc-text-link vc-text-link--violet inline-flex items-center gap-2 font-mono text-sm font-medium"
+                >
+                  GitHub
+                  <span aria-hidden>→</span>
+                </a>
+              ) : null}
+            </div>
           </div>
         </section>
       </article>
-    </div>
+    </LabInnerLayout>
   );
 }

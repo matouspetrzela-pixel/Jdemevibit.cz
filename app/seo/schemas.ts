@@ -20,14 +20,6 @@ export interface WebSiteSchema {
   name: string;
   url: string;
   description: string;
-  potentialAction?: {
-    "@type": "SearchAction";
-    target: {
-      "@type": "EntryPoint";
-      urlTemplate: string;
-    };
-    "query-input": string;
-  };
 }
 
 // Person Schema pro E-E-A-T (Expertise, Experience, Authoritativeness, Trustworthiness)
@@ -53,7 +45,7 @@ export function getPersonSchema(): PersonSchema {
   };
 }
 
-// WebSite Schema s SearchAction
+// WebSite — bez SearchAction (žádná /search stránka; fiktivní Sitelinks search by škodil konzistenci).
 export function getWebSiteSchema(): WebSiteSchema {
   return {
     "@context": "https://schema.org",
@@ -61,13 +53,5 @@ export function getWebSiteSchema(): WebSiteSchema {
     name: siteConfig.name,
     url: siteConfig.url,
     description: siteConfig.description,
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${siteConfig.url}/search?q={search_term_string}`,
-      },
-      "query-input": "required name=search_term_string",
-    },
   };
 }

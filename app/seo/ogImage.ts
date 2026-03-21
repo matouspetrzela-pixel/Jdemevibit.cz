@@ -1,6 +1,8 @@
 // OG Image generator utility
 // Pro LinkedIn-optimalizované OG obrázky
 
+import { siteOrigin } from "@/lib/seo";
+
 export interface OGImageData {
   title: string;
   tool?: string;
@@ -13,13 +15,11 @@ export function generateOGImagePath(data: OGImageData): string {
   // Prozatím vracíme statickou cestu
   // TODO: Implementovat dynamickou generaci OG obrázků
   
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://jdemevibit.cz";
-  return `${baseUrl}/og-image.jpg`;
+  return `${siteOrigin}/og-image.jpg`;
 }
 
 // Helper pro vytvoření OG image URL s parametry
 export function buildOGImageUrl(data: OGImageData): string {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://jdemevibit.cz";
   const params = new URLSearchParams({
     title: data.title,
     ...(data.tool && { tool: data.tool }),
@@ -28,5 +28,5 @@ export function buildOGImageUrl(data: OGImageData): string {
   });
   
   // Dynamická generace přes API route
-  return `${baseUrl}/api/og?${params.toString()}`;
+  return `${siteOrigin}/api/og?${params.toString()}`;
 }

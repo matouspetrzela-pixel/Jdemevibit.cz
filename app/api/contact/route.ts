@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { siteOrigin } from "@/lib/seo";
 
 /** In-memory rate limit: max 5 requestů za 15 minut na IP. Na Vercelu platí jen v rámci jedné instance; pro sdílený limit použijte např. Vercel KV / Upstash Redis. */
 const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
@@ -168,7 +169,10 @@ export async function POST(request: NextRequest) {
     const gotcha = formData.get("_gotcha");
     if (gotcha && typeof gotcha === "string") params.set("_gotcha", gotcha);
 
-    const origin = request.headers.get("origin") || request.headers.get("referer") || "https://www.jdemevibit.cz";
+    const origin =
+      request.headers.get("origin") ||
+      request.headers.get("referer") ||
+      siteOrigin;
     const res = await fetch(FORMSPREE_URL, {
       method: "POST",
       body: params.toString(),

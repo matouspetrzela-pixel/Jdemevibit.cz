@@ -1,8 +1,13 @@
 // SEO utilities a site configuration
 
+/** Kanonický původ webu bez koncového / — sjednocuje www vs apex napříč metadaty a JSON-LD. */
+export const siteOrigin = (
+  process.env.NEXT_PUBLIC_SITE_URL || "https://www.jdemevibit.cz"
+).replace(/\/$/, "");
+
 export const siteConfig = {
   name: "Jdemevibit",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://jdemevibit.cz",
+  url: siteOrigin,
   description: "Vibe Coding & AI Tvorba z Praxe. Projekty vytvořené s AI nástroji, dokumentované procesy a learning in public přístup.",
   keywords: [
     "jdemevibit",

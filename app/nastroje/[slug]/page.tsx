@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { getContentBySlug, type Nastroj } from "@/lib/content-types";
 import { generatePageMetadata } from "@/app/seo/generateMetadata";
-import { BackButton } from "@/components/BackButton";
+import { LabInnerLayout } from "@/components/lab/LabInnerLayout";
+import { GlassPanel } from "@/components/lab/GlassPanel";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -36,74 +37,77 @@ export default async function NastrojPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f1217]">
-      <BackButton />
-      <article className="container mx-auto px-4 py-16 max-w-4xl">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-8">
+    <LabInnerLayout>
+      <article>
+        <p className="lab-eyebrow mb-3 text-[#00f0ff]/60">
+          {"// nastroj.read"}
+        </p>
+        <h1 className="lab-section-title mb-10 text-3xl font-bold tracking-[-0.04em] text-white md:text-4xl">
           {content.title}
         </h1>
 
-        {/* TL;DR sekce */}
-        <div className="bg-white/5 border border-white/10 rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold text-white mb-3">TL;DR</h2>
-          <p className="text-white/80">{content.description}</p>
-        </div>
+        <GlassPanel className="mb-10 p-6 md:p-8">
+          <h2 className="lab-section-title mb-3 text-lg font-semibold text-white">
+            TL;DR
+          </h2>
+          <p className="text-zinc-400">{content.description}</p>
+        </GlassPanel>
 
-        {/* Co to je */}
         <section className="mb-12">
-          <h2 className="text-3xl font-bold text-white mb-4">Co to je</h2>
-          <p className="text-white/80 text-lg leading-relaxed">
-            {content.what}
-          </p>
+          <h2 className="lab-section-title mb-4 text-2xl font-bold tracking-[-0.04em] text-white">
+            Co to je
+          </h2>
+          <div className="lab-prose text-zinc-400">
+            <p>{content.what}</p>
+          </div>
         </section>
 
-        {/* Proč to používáme */}
         <section className="mb-12">
-          <h2 className="text-3xl font-bold text-white mb-4">Proč to používáme</h2>
-          <p className="text-white/80 text-lg leading-relaxed">
-            {content.why}
-          </p>
+          <h2 className="lab-section-title mb-4 text-2xl font-bold tracking-[-0.04em] text-white">
+            Proč to používáme
+          </h2>
+          <div className="lab-prose text-zinc-400">
+            <p>{content.why}</p>
+          </div>
         </section>
 
-        {/* Jak to používat */}
         <section className="mb-12">
-          <h2 className="text-3xl font-bold text-white mb-4">Jak to používat</h2>
-          <p className="text-white/80 text-lg leading-relaxed whitespace-pre-line">
-            {content.how}
-          </p>
+          <h2 className="lab-section-title mb-4 text-2xl font-bold tracking-[-0.04em] text-white">
+            Jak to používat
+          </h2>
+          <div className="lab-prose whitespace-pre-line text-zinc-400">
+            <p>{content.how}</p>
+          </div>
         </section>
 
-        {/* Praktické use cases */}
-        {content.useCases && content.useCases.length > 0 && (
+        {content.useCases && content.useCases.length > 0 ? (
           <section className="mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">
+            <h2 className="lab-section-title mb-4 text-2xl font-bold tracking-[-0.04em] text-white">
               Praktické use cases
             </h2>
-            <ul className="list-disc list-inside text-white/80 space-y-2">
+            <ul className="list-disc space-y-2 pl-5 text-zinc-400">
               {content.useCases.map((useCase, index) => (
                 <li key={index}>{useCase}</li>
               ))}
             </ul>
           </section>
-        )}
+        ) : null}
 
-        {/* Alternativy */}
-        {content.alternatives && content.alternatives.length > 0 && (
+        {content.alternatives && content.alternatives.length > 0 ? (
           <section className="mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Alternativy</h2>
+            <h2 className="lab-section-title mb-4 text-2xl font-bold tracking-[-0.04em] text-white">
+              Alternativy
+            </h2>
             <div className="flex flex-wrap gap-2">
               {content.alternatives.map((alt) => (
-                <span
-                  key={alt}
-                  className="px-3 py-1 bg-white/10 rounded text-sm text-white/80"
-                >
+                <span key={alt} className="vc-tag">
                   {alt}
                 </span>
               ))}
             </div>
           </section>
-        )}
+        ) : null}
       </article>
-    </div>
+    </LabInnerLayout>
   );
 }

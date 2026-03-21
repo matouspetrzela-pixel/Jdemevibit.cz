@@ -14,17 +14,20 @@ export function UseCasesSection({ projects }: UseCasesSectionProps) {
 
   if (projects.length === 0) {
     return (
-      <section id="use-cases" className="container mx-auto px-4 py-16 md:py-24">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#ffffff]">
-            PROJEKTY
-          </h2>
-          <p className="text-[#ffffff] opacity-60 text-sm md:text-base">
+      <section id="use-cases" className="pt-4 md:pt-6">
+        <div className="mb-10 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="lab-eyebrow text-[#00f0ff]/60">{"// projects.grid"}</p>
+            <h2 className="lab-section-title mt-3 text-3xl font-bold tracking-[-0.04em] text-white md:text-4xl">
+              Projekty
+            </h2>
+          </div>
+          <p className="font-mono text-sm text-zinc-500 md:text-right">
             Zobrazeno 0 projektů
           </p>
         </div>
-        <p className="text-white/70 text-center">
-          Projekty budou přidány brzy...
+        <p className="lab-eyebrow py-12 text-center text-zinc-500/80">
+          {"// empty — projekty budou přidány brzy"}
         </p>
       </section>
     );
@@ -32,16 +35,24 @@ export function UseCasesSection({ projects }: UseCasesSectionProps) {
 
   return (
     <>
-      <section id="use-cases" className="container mx-auto px-4 py-16 md:py-24">
-        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-10 md:mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#ffffff] tracking-tight">
-            PROJEKTY
-          </h2>
-          <p className="text-[#ffffff] opacity-60 text-sm md:text-base md:text-right">
-            Zobrazeno {projects.length} {projects.length === 1 ? "projekt" : projects.length < 5 ? "projekty" : "projektů"}
+      <section id="use-cases" className="pt-4 md:pt-6">
+        <div className="mb-10 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="lab-eyebrow text-[#00f0ff]/60">{"// projects.grid"}</p>
+            <h2 className="lab-section-title mt-3 text-3xl font-bold tracking-[-0.04em] text-white md:text-4xl">
+              Projekty
+            </h2>
+          </div>
+          <p className="font-mono text-sm text-zinc-500 md:text-right">
+            Zobrazeno {projects.length}{" "}
+            {projects.length === 1
+              ? "projekt"
+              : projects.length < 5
+                ? "projekty"
+                : "projektů"}
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
           {projects.map((project) => (
             <ProjectCard
               key={project.id}
@@ -52,7 +63,6 @@ export function UseCasesSection({ projects }: UseCasesSectionProps) {
         </div>
       </section>
 
-      {/* Modal pro detail */}
       <UseCaseModal
         project={selectedProject}
         onClose={() => setSelectedProject(null)}

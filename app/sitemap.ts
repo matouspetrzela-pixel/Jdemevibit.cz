@@ -1,26 +1,44 @@
 import { MetadataRoute } from "next";
 import { getAllContent } from "@/lib/content-types";
+import { siteOrigin } from "@/lib/seo";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://jdemevibit.cz";
   const now = new Date();
-  
-  // Statické stránky
+
+  // Statické stránky + listingy sekcí
   const staticPages: MetadataRoute.Sitemap = [
     {
-      url: baseUrl,
+      url: siteOrigin,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 1,
     },
     {
-      url: `${baseUrl}/o-mne`,
+      url: `${siteOrigin}/use-cases`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    {
+      url: `${siteOrigin}/navody`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${siteOrigin}/nastroje`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${siteOrigin}/o-mne`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/kontakt`,
+      url: `${siteOrigin}/kontakt`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.7,
@@ -32,7 +50,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const contentPages: MetadataRoute.Sitemap = allContent
     .filter((item) => item.published)
     .map((item) => ({
-      url: `${baseUrl}/${item.category === "use-case" ? "use-cases" : item.category === "navod" ? "navody" : "nastroje"}/${item.slug}`,
+      url: `${siteOrigin}/${item.category === "use-case" ? "use-cases" : item.category === "navod" ? "navody" : "nastroje"}/${item.slug}`,
       lastModified: new Date(item.updatedAt),
       changeFrequency: "monthly" as const,
       priority: item.category === "use-case" ? 0.9 : 0.8,

@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { getContentBySlug, type Navod } from "@/lib/content-types";
 import { generatePageMetadata } from "@/app/seo/generateMetadata";
-import { BackButton } from "@/components/BackButton";
+import { LabInnerLayout } from "@/components/lab/LabInnerLayout";
+import { GlassPanel } from "@/components/lab/GlassPanel";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -36,45 +37,42 @@ export default async function NavodPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f1217]">
-      <BackButton />
-      <article className="container mx-auto px-4 py-16 max-w-4xl">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-8">
+    <LabInnerLayout>
+      <article>
+        <p className="lab-eyebrow mb-3 text-[#00f0ff]/60">{"// navod.read"}</p>
+        <h1 className="lab-section-title mb-10 text-3xl font-bold tracking-[-0.04em] text-white md:text-4xl">
           {content.title}
         </h1>
 
-        {/* TL;DR sekce */}
-        <div className="bg-white/5 border border-white/10 rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold text-white mb-3">TL;DR</h2>
-          <p className="text-white/80">{content.description}</p>
-        </div>
+        <GlassPanel className="mb-10 p-6 md:p-8">
+          <h2 className="lab-section-title mb-3 text-lg font-semibold text-white">
+            TL;DR
+          </h2>
+          <p className="text-zinc-400">{content.description}</p>
+        </GlassPanel>
 
-        {/* Informace o návodu */}
-        <div className="mb-8 space-y-4">
-          <div className="flex flex-wrap gap-4 text-sm text-white/70">
+        <div className="mb-10 space-y-4">
+          <div className="flex flex-wrap gap-6 font-mono text-sm text-zinc-500">
             <div>
-              <span className="font-semibold text-white">Obtížnost:</span>{" "}
+              <span className="text-zinc-400">Obtížnost:</span>{" "}
               {content.difficulty === "beginner"
                 ? "Začátečník"
                 : content.difficulty === "intermediate"
-                ? "Střední"
-                : "Pokročilý"}
+                  ? "Střední"
+                  : "Pokročilý"}
             </div>
             <div>
-              <span className="font-semibold text-white">Čas:</span>{" "}
-              {content.timeRequired}
+              <span className="text-zinc-400">Čas:</span> {content.timeRequired}
             </div>
           </div>
 
-          {/* Nástroje */}
           <div>
-            <h3 className="text-lg font-semibold text-white mb-2">Nástroje</h3>
+            <h3 className="lab-section-title mb-3 text-lg font-semibold text-white">
+              Nástroje
+            </h3>
             <div className="flex flex-wrap gap-2">
               {content.tools.map((tool) => (
-                <span
-                  key={tool}
-                  className="px-3 py-1 bg-[#7b3beb]/20 text-[#7b3beb] rounded-lg text-sm"
-                >
+                <span key={tool} className="vc-tag vc-tag--violet">
                   {tool}
                 </span>
               ))}
@@ -82,35 +80,38 @@ export default async function NavodPage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* Kroky návodu */}
         <section className="mb-12">
-          <h2 className="text-3xl font-bold text-white mb-6">Postup</h2>
-          <div className="space-y-8">
+          <h2 className="lab-section-title mb-6 text-2xl font-bold tracking-[-0.04em] text-white">
+            Postup
+          </h2>
+          <div className="space-y-6">
             {content.steps.map((step, index) => (
-              <div key={index} className="bg-white/5 border border-white/10 rounded-lg p-6">
-                <h3 className="text-xl font-semibold text-white mb-3">
+              <GlassPanel key={index} className="p-6 md:p-8">
+                <h3 className="lab-section-title mb-3 text-xl font-semibold text-white">
                   Krok {index + 1}: {step.title}
                 </h3>
-                <p className="text-white/80 mb-4">{step.description}</p>
-                {step.code && (
-                  <pre className="bg-[#0f1217] border border-white/10 rounded p-4 overflow-x-auto">
-                    <code className="text-sm text-white/70">{step.code}</code>
+                <p className="mb-4 text-zinc-400">{step.description}</p>
+                {step.code ? (
+                  <pre className="overflow-x-auto rounded-sm border border-white/[0.08] bg-black/50 p-4">
+                    <code className="font-mono text-sm text-zinc-400">
+                      {step.code}
+                    </code>
                   </pre>
-                )}
-                {step.image && (
+                ) : null}
+                {step.image ? (
                   <div className="mt-4">
                     <img
                       src={step.image}
                       alt={step.title}
-                      className="rounded-lg max-w-full"
+                      className="max-w-full rounded-sm border border-white/[0.08]"
                     />
                   </div>
-                )}
-              </div>
+                ) : null}
+              </GlassPanel>
             ))}
           </div>
         </section>
       </article>
-    </div>
+    </LabInnerLayout>
   );
 }

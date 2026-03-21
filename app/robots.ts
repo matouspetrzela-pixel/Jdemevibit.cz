@@ -1,8 +1,7 @@
 import { MetadataRoute } from "next";
+import { siteOrigin } from "@/lib/seo";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://jdemevibit.cz";
-  
   return {
     rules: [
       {
@@ -16,6 +15,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/", "/admin/"],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${siteOrigin}/sitemap.xml`,
   };
 }

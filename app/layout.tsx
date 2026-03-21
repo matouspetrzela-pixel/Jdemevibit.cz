@@ -1,36 +1,48 @@
-import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { siteOrigin } from "@/lib/seo";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { StructuredData } from "@/components/StructuredData";
 import { CookieConsent } from "@/components/CookieConsent";
 import GoogleAnalyticsWrapper from "@/components/GoogleAnalyticsWrapper";
 
-const roboto = Roboto({
-  weight: ["300", "400", "500", "700", "900"],
-  subsets: ["latin"],
-  variable: "--font-roboto",
+const inter = Inter({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-lab-sans",
   display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-lab-mono",
+  display: "swap",
+  weight: ["400", "500", "600"],
+});
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#000000",
+};
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://jdemevibit.cz"),
+  metadataBase: new URL(siteOrigin),
   title: {
-    default: "Vibe Coding & AI Tvorba z Praxe | Jdemevibit",
-    template: "%s | Jdemevibit"
+    default: "Vibe Coding Laboratory | Jdemevibit",
+    template: "%s | Jdemevibit",
   },
-  description: "Praktické projekty vytvořené s AI nástroji. Dokumentované procesy, reálné výsledky a learning in public přístup. Vibe coding v praxi.",
+  description:
+    "Exkluzivní česká laboratoř pro buildery, kteří ohýbají AI a shipují v českých reáliích. Case study, stack, komunita.",
   keywords: [
     "jdemevibit",
     "vibe coding",
-    "AI projekty",
-    "začátečníci",
-    "learning by doing",
-    "AI tvorba",
-    "začátek programování",
-    "AI pro začátečníky",
+    "Vibe Coding Laboratory",
+    "AI build",
+    "Cursor",
+    "case study",
     "vibecodingcz",
-    "jdemenato",
-    "ucimesedelaním"
   ],
   authors: [{ name: "Jdemevibit" }],
   creator: "Jdemevibit",
@@ -43,23 +55,25 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "cs_CZ",
-    url: "https://jdemevibit.cz",
+    url: siteOrigin,
     siteName: "Jdemevibit",
-    title: "Vibe Coding & AI Tvorba z Praxe",
-    description: "Praktické projekty vytvořené s AI nástroji. Dokumentované procesy a learning in public přístup.",
+    title: "Vibe Coding Laboratory | Jdemevibit",
+    description:
+      "Exkluzivní česká laboratoř pro buildery. Kdo, co, jak — v češtině a s lokálním kontextem.",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Jdemevibit - Začni tvořit s AI",
+        alt: "Jdemevibit — Vibe Coding Laboratory",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vibe Coding & AI Tvorba z Praxe",
-    description: "Praktické projekty vytvořené s AI nástroji. Dokumentované procesy a learning in public přístup.",
+    title: "Vibe Coding Laboratory | Jdemevibit",
+    description:
+      "Exkluzivní česká laboratoř pro buildery. Kdo, co, jak — v češtině.",
     images: ["/og-image.jpg"],
   },
   robots: {
@@ -74,7 +88,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://jdemevibit.cz",
+    canonical: siteOrigin,
   },
 };
 
@@ -84,7 +98,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="cs" className={roboto.variable}>
+    <html lang="cs" className={`${inter.variable} ${jetbrains.variable}`}>
       <body className="font-sans antialiased">
         <StructuredData />
         {children}
