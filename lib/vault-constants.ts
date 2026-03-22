@@ -1,7 +1,8 @@
-/** Tajný kód Phase Alpha — musí přesně sedět (case-insensitive po normalizaci). */
-export const VAULT_SECRET_CODE = "VIBE_LAB_01";
+/** Tajný kód Vaultu — case-insensitive (viz normalizeVaultInput). */
+export const VAULT_SECRET_CODE = "decrypted002";
 
-export const VAULT_STORAGE_KEY = "jdv_vault_clearance_v1";
+/** Nová verze při změně hesla — starý unlock z předchozího kódu se ignoruje. */
+export const VAULT_STORAGE_KEY = "jdv_vault_clearance_v2";
 
 export function readVaultUnlocked(): boolean {
   if (typeof window === "undefined") return false;

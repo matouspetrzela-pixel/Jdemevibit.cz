@@ -1,5 +1,6 @@
 "use client";
 
+import type { MouseEvent } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -8,6 +9,16 @@ const linkBase =
 
 export function Header() {
   const pathname = usePathname();
+
+  /** Na úvodní stránce stejný odkaz = scroll nahoru (Next na / → / nescrolluje). */
+  const handleLabClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    if (pathname !== "/") return;
+    e.preventDefault();
+    const instant = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    window.scrollTo({ top: 0, behavior: instant ? "auto" : "smooth" });
+  };
 
   const active = (path: string) =>
     pathname === path ? "text-[#00f0ff]" : "";
@@ -25,7 +36,16 @@ export function Header() {
         <nav aria-label="Hlavní navigace">
           <ul className="flex flex-wrap justify-center gap-x-2 gap-y-1 md:justify-end md:gap-x-6 md:gap-y-0 lg:gap-x-8">
             <li>
-              <Link href="/" className={`${linkBase} ${active("/")}`}>
+              <Link
+                href="/"
+                className={`${linkBase} ${active("/")}`}
+                onClick={handleLabClick}
+                aria-label={
+                  pathname === "/"
+                    ? "Laboratoř — zpět na začátek stránky"
+                    : "Laboratoř — úvodní stránka"
+                }
+              >
                 LABORATOŘ
               </Link>
             </li>

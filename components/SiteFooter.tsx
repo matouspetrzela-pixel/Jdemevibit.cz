@@ -9,7 +9,7 @@ export function SiteFooter() {
     >
       <div className="mx-auto max-w-7xl px-5 text-center">
         <p className="font-mono text-[0.65rem] text-[#00f0ff]/[0.15]">
-          {"// sys_access: VIBE_LAB_01"}
+          {"// sys_access: decrypted002"}
         </p>
       </div>
     </footer>
