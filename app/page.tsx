@@ -2,7 +2,6 @@ import { Header } from "@/components/Header";
 import { generatePageMetadata } from "@/app/seo/generateMetadata";
 import { LabHero } from "@/components/lab/LabHero";
 import { LabShowcaseSection } from "@/components/lab/LabShowcaseSection";
-import { LabMatousSection } from "@/components/lab/LabMatousSection";
 import { LabVaultSection } from "@/components/lab/LabVaultSection";
 
 export const metadata = generatePageMetadata({
@@ -20,7 +19,6 @@ export default function Home() {
         <LabHero />
         <LabShowcaseSection />
         <LabVaultSection />
-        <LabMatousSection />
       </main>
     </div>
   );

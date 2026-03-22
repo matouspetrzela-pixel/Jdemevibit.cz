@@ -2,6 +2,7 @@ import { generatePageMetadata } from "@/app/seo/generateMetadata";
 import { LabInnerLayout } from "@/components/lab/LabInnerLayout";
 import { PageIntro } from "@/components/lab/PageIntro";
 import { GlassPanel } from "@/components/lab/GlassPanel";
+import { AboutChiefArchitectCard } from "@/components/lab/AboutChiefArchitectCard";
 
 export const metadata = generatePageMetadata({
   title: "O mně",
@@ -18,6 +19,10 @@ export default function AboutPage() {
         title="O mně"
         subtitle="Bez zkratky. S prvním krokem."
       />
+
+      <div className="mb-10 md:mb-12">
+        <AboutChiefArchitectCard />
+      </div>
 
       <GlassPanel className="p-6 md:p-10">
         <div className="lab-prose text-base md:text-lg">

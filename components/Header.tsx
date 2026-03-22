@@ -3,6 +3,8 @@
 import type { MouseEvent } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useCallback, useState } from "react";
+import { ContactTerminalModal } from "@/components/ContactTerminalModal";
 
 const linkBase =
   "font-mono text-xs uppercase tracking-[0.18em] text-zinc-500 transition-colors duration-200 hover:text-[#00f0ff]";
@@ -21,6 +23,8 @@ function scrollToTopIfSamePage(
 
 export function Header() {
   const pathname = usePathname();
+  const [contactModalOpen, setContactModalOpen] = useState(false);
+  const closeContactModal = useCallback(() => setContactModalOpen(false), []);
 
   const onLab = (e: MouseEvent<HTMLAnchorElement>) =>
     scrollToTopIfSamePage(e, pathname === "/");
@@ -37,6 +41,16 @@ export function Header() {
   const onKontakt = (e: MouseEvent<HTMLAnchorElement>) =>
     scrollToTopIfSamePage(e, pathname === "/kontakt");
 
+  function handleKontaktClick(e: MouseEvent<HTMLAnchorElement>) {
+    if (pathname === "/kontakt") {
+      onKontakt(e);
+      return;
+    }
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    e.preventDefault();
+    setContactModalOpen(true);
+  }
+
   const active = (path: string) =>
     pathname === path ? "text-[#00f0ff]" : "";
 
@@ -49,6 +63,10 @@ export function Header() {
 
   return (
     <header className="vc-header sticky top-0 z-[60] border-b border-transparent">
+      <ContactTerminalModal
+        open={contactModalOpen}
+        onClose={closeContactModal}
+      />
       <div className="mx-auto flex max-w-7xl justify-center px-5 py-3.5 md:justify-end">
         <nav aria-label="Hlavní navigace">
           <ul className="flex flex-wrap justify-center gap-x-2 gap-y-1 md:justify-end md:gap-x-6 md:gap-y-0 lg:gap-x-8">
@@ -111,15 +129,23 @@ export function Header() {
             <li>
               <Link
                 href="/kontakt"
-                className={`${linkBase} ${active("/kontakt")}`}
-                onClick={onKontakt}
+                className={`group relative inline-flex min-h-[1.35em] min-w-0 items-center justify-end sm:min-w-[14.5rem] ${linkBase} ${active("/kontakt")}`}
+                onClick={handleKontaktClick}
                 aria-label={
                   pathname === "/kontakt"
                     ? "Kontakt — zpět na začátek stránky"
-                    : "Kontakt"
+                    : "Kontakt — otevřít zabezpečený kanál (nebo Ctrl+klik na stránku Kontakt)"
                 }
               >
-                KONTAKT
+                <span className="transition-opacity duration-200 group-hover:opacity-0">
+                  [ KONTAKT ]
+                </span>
+                <span
+                  className="pointer-events-none absolute right-0 top-1/2 max-w-[min(72vw,19rem)] -translate-y-1/2 text-right text-[0.62rem] leading-tight opacity-0 transition-opacity duration-200 group-hover:opacity-100 sm:text-[0.65rem] md:text-xs"
+                  aria-hidden
+                >
+                  [ ESTABLISH_CONNECTION ]
+                </span>
               </Link>
             </li>
           </ul>

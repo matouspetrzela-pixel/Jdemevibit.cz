@@ -2,16 +2,12 @@
 
 import { useState, useRef } from "react";
 import { GlassPanel } from "@/components/lab/GlassPanel";
-
-const FORMSPREE_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID || "xkovrywy";
-const FORMSPREE_CONFIGURED = Boolean(FORMSPREE_FORM_ID);
-const FORMSPREE_URL = `https://formspree.io/f/${FORMSPREE_FORM_ID}`;
-const API_CONTACT = "/api/contact";
-
-/** Výchozí = percent-encoded (š, ž) — spolehlivější než diakritika v některých .env */
-const LINKEDIN_URL =
-  process.env.NEXT_PUBLIC_LINKEDIN_URL ||
-  "https://www.linkedin.com/in/matou%C5%A1-petr%C5%BEela";
+import {
+  API_CONTACT,
+  FORMSPREE_CONFIGURED,
+  FORMSPREE_URL,
+  LINKEDIN_URL,
+} from "@/lib/contact-constants";
 
 export function ContactForm() {
   const [formStatus, setFormStatus] = useState("");
