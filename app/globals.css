@@ -698,6 +698,91 @@ img[loading="lazy"].loaded {
   color: rgba(0, 240, 255, 0.65);
 }
 
+/* —— Kontakt: lab formulář (ContactForm) —— */
+.contact-lab-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 0.35rem;
+}
+
+.contact-lab-required {
+  color: rgba(0, 240, 255, 0.32);
+  font-weight: 500;
+}
+
+.contact-lab-input {
+  width: 100%;
+  border-radius: var(--vc-radius);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 240, 255, 0.055) 0%,
+      transparent 55%
+    ),
+    #050505;
+  padding: 0.75rem 1rem;
+  color: #f4f4f5;
+  font-family: var(--font-lab-mono), ui-monospace, monospace;
+  font-size: 0.875rem;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.contact-lab-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.contact-lab-textarea {
+  line-height: 1.65;
+}
+
+.contact-lab-input:focus {
+  outline: none;
+  border-color: var(--ht-cyan);
+  box-shadow:
+    inset 0 0 10px rgba(0, 255, 255, 0.1),
+    0 0 0 1px rgba(0, 240, 255, 0.22);
+}
+
+.contact-lab-submit {
+  width: 100%;
+  border-radius: var(--vc-radius);
+  border: 1px solid rgb(6, 182, 212);
+  background: transparent;
+  padding: 0.8rem 1rem;
+  font-family: var(--font-lab-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(6, 182, 212);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.contact-lab-submit:hover:not(:disabled) {
+  background-color: rgb(6, 182, 212);
+  color: #000000;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+}
+
+.contact-lab-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.contact-lab-submit:disabled:hover {
+  background: transparent;
+  color: rgb(6, 182, 212);
+  box-shadow: none;
+}
+
 .vc-tag {
   display: inline-flex;
   align-items: center;
@@ -737,7 +822,7 @@ img[loading="lazy"].loaded {
 
 .lab-prose {
   color: rgba(228, 228, 231, 0.82);
-  line-height: 1.75;
+  line-height: 1.6;
   font-size: 1.0625rem;
 }
 
@@ -760,7 +845,12 @@ img[loading="lazy"].loaded {
 }
 
 .lab-prose p {
-  margin-bottom: 1rem;
+  margin-bottom: 1.35rem;
+  line-height: 1.6;
+}
+
+.lab-prose p:last-child {
+  margin-bottom: 0;
 }
 
 .lab-prose ul {

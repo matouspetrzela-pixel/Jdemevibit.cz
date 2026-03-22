@@ -66,7 +66,7 @@ export function AboutChiefArchitectCard() {
           <h2 className="text-lg font-bold tracking-tight text-white md:text-xl">
             [ SYSTEM_CHIEF_ARCHITECT ]
           </h2>
-          <p className="text-base leading-relaxed text-zinc-300 md:text-lg">
+          <p className="text-base leading-[1.6] text-zinc-300 md:text-lg">
             Neprogramuji, kurátoruji vizi. Moje seance (viz.{" "}
             <Link
               href="/use-cases"

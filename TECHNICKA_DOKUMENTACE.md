@@ -11,6 +11,7 @@
 7. [Kontaktní formulář a Formspree](#kontaktní-formulář-a-formspree)
 8. [Deployment](#deployment)
 9. [Vývoj](#vývoj)
+10. [Vibe Coding Lab — master dokumentace](#vibe-coding-lab--master-dokumentace)
 
 ---
 
@@ -90,6 +91,103 @@ jdemevibit-web/
 - **Font:** Inter (Google Fonts)
 - **Display:** swap (pro performance)
 - **Antialiasing:** aktivní
+
+---
+
+## Vibe Coding Lab — master dokumentace
+
+> Shrnutí produktové a designové dokumentace (včetně syntézy z externího přehledu Gemini), **sladěné se skutečným stavem repozitáře** (`package.json`, `lib/vault-constants.ts`, `app/layout.tsx`).
+
+### Status a metodika
+
+| Položka | Hodnota |
+|--------|---------|
+| **Status** | Nasazeno (produkce v1.0+) |
+| **Metodika** | AI-first vibe coding (Cursor / Composer workflow) |
+| **Architekt obsahu** | Matouš (@matous) |
+
+### Stack (ověřeno v kódu)
+
+| Oblast | Skutečnost v projektu |
+|--------|------------------------|
+| **Framework** | Next.js 16 (App Router), React 19 |
+| **Styling** | Tailwind CSS v4 (`tailwindcss` ^4, `@tailwindcss/postcss`) |
+| **Animace** | Framer Motion (`framer-motion` v dependencies) |
+| **Fonty** | Inter + JetBrains Mono (Google Fonts, root layout) |
+| **Ikony** | V `package.json` **není** Lucide React; ikony řešeny **inline SVG** tam, kde jsou potřeba (např. LinkedIn v shelved modalu) |
+| **Vault / stav** | `localStorage` klíč `jdv_vault_clearance_v2` — hodnota `"1"` = odemčeno (`lib/vault-constants.ts`) |
+| **Tajný kód Vaultu** | Konstanta `VAULT_SECRET_CODE` (aktuálně `decrypted002`; vstup se normalizuje přes `normalizeVaultInput`) |
+
+### UI/UX filozofie
+
+- Web se **vyhýbá generickému „firemnímu“** vzhledu; cílem je dojem **labu / terminálu / OS** v tmavé paletě.
+- **Barvy:** častá černá `#000` / `#050505`, akcent **kyan** (`--ht-cyan: #00f0ff` v `app/globals.css`), doplňkově lila/červená dle brandu v theme.
+- **Interaktivita:** hover a focus (např. glitch na portrétu v sekci O mně, glow na inputech v terminálovém modalu).
+- **No-login Vault:** odemčení přes zadání kódu a zápis do `localStorage`, bez registrace — pocit „uzavřené komunity“ přes hru na kódy, ne přes formulářové účty.
+
+### Prompt Library (instrukce pro AI / Cursor)
+
+Archiv zadání, která definovala směr UI a funkcí. Rychlá kopie pro vkládání do chatu: [`prompts.md`](./prompts.md).
+
+#### A. Vizuální jazyk (The Foundation)
+
+> Vytvoř UI komponentu pro High-End AI Portfolio. Styl: Deep Tech / Cyberpunk / Minimalist.  
+> Pozadí: Čistá černá `#000`. Barvy: Kyanová pro akci, jantarová pro varování.  
+> Efekty: Glassmorphism (white/5%), border gradienty, scanline overlay.  
+> Font: JetBrains Mono (monospaced).  
+> Animace: Použij Framer Motion pro plynulé „spring“ vstupy prvků. Web nesmí vypadat staticky, musí dýchat.
+
+#### B. The Vault (herní mechanika)
+
+> Implementuj podstránku `/vault` jako interaktivní tabulku souborů. Sloupce: [ID], [FILENAME], [TYPE], [STATUS].  
+> Mechanika: Většina řádků je `ENCRYPTED` (jantarová). Přidej input pole `[ENTER_CLEARANCE_CODE]`.  
+> Pokud uživatel zadá správný clearance kód, ulož stav do `localStorage` a spusť krátký vizuální glitch efekt, který přepne soubory na `DECRYPTED` (kyanová).
+
+**Implementační poznámka:** V produkci je kód v [`lib/vault-constants.ts`](lib/vault-constants.ts) (`VAULT_SECRET_CODE`, `VAULT_STORAGE_KEY`). Není to nutně literál z původního návrhu (např. `VIBE_LAB_01`); při změně kódu řeš verzi úložiště podle komentářů v souboru.
+
+#### C. Nanobanana digitalizace (O mně)
+
+> Uprav fotografii zakladatele tak, aby zapadla do tech designu.  
+> CSS filtry: např. `grayscale(100%)`, úprava `brightness` / `contrast`.  
+> Do brýlí vlož jemný statický text z `.cursorrules` nebo kódový odlesk.  
+> Při hoveru na fotku spusť RGB-split glitch.  
+> Pod fotku vlož label v monospace (metadata).
+
+**Implementace:** [`components/lab/AboutChiefArchitectCard.tsx`](components/lab/AboutChiefArchitectCard.tsx), styly v `app/globals.css` (třídy `about-chief-card`, `chief-*`).
+
+#### D. Secure Uplink (kontakt)
+
+> Vytvoř kontaktní formulář jako simulaci terminálu.  
+> Názvy polí: `$ CALLER_ID` (Jméno), `$ RETURN_PATH` (Email), `$ PAYLOAD` (Zpráva).  
+> Inputy: tmavé pozadí, kyanový border při focusu, čitelné placeholdery.  
+> Tlačítko: `[ EXECUTE_SEND ]` s výrazným hoverem.  
+> Přidej jasný odkaz nebo tlačítko LinkedIn jako `[ LINKEDIN_PROFILE ]`.
+
+**Aktuální stav:** Jediný aktivní odesílací kanál pro uživatele je stránka **`/kontakt`** — [`components/ContactForm.tsx`](components/ContactForm.tsx) + [`lib/contact-constants.ts`](lib/contact-constants.ts) + [`app/api/contact/route.ts`](app/api/contact/route.ts).  
+Komponenta [`components/ContactTerminalModal.tsx`](components/ContactTerminalModal.tsx) obsahuje terminálové UI dle promptu D, ale **není** vložená v [`components/Header.tsx`](components/Header.tsx) (záměrně jeden přehledný formulář na `/kontakt`).
+
+### Architektura obsahu Vaultu (`lib/vault-content.ts`)
+
+Logické „protokoly“ (mozek textů pro Vault UI):
+
+| ID | Zaměření | Obsah (stručně) |
+|----|-----------|-----------------|
+| **001** | ARCHITECT_INITIALIZER / Master Cursor rules | Snippet pro start projektu v Cursoru (struktura Next, App Router, dark UI, Framer Motion) |
+| **002** | THE_VIBE_PIPELINE | Pipeline v0 → Cursor → iterace |
+| **003** | MOTION_REVEAL_ENGINE | Framer Motion reveal pattern pro sekce / karty |
+
+**Rozšíření:** přidat nové exporty a napojit je ve vault UI (např. `VaultPhaseAlpha`).
+
+### Údržba a rozvoj (future-proofing)
+
+- **Nový vault obsah:** rozšířit [`lib/vault-content.ts`](lib/vault-content.ts) a komponenty ve [`components/vault/`](components/vault/).
+- **Změna tajného kódu:** pouze [`lib/vault-constants.ts`](lib/vault-constants.ts) + případná nová verze `VAULT_STORAGE_KEY`, aby se invalidovalo staré odemčení.
+- **Kontakt / Formspree:** env a chování popsáno v sekci [Kontaktní formulář a Formspree](#kontaktní-formulář-a-formspree); sdílené konstanty v `lib/contact-constants.ts`.
+- **Responzivita:** web je mobile-first; u karet v sekci Showcase dbát na konzistentní poměry médií.
+
+### Závěrečný log
+
+Dokumentace v této kapitole doplňuje zbytek souboru o **produktový a promptový kontext**. Technická pravda je v kódu a v env proměnných; tato část drží **směr a znovupoužitelné prompty** pro další iterace.
 
 ---
 
@@ -795,5 +893,5 @@ const newUseCase: UseCase = {
 
 ---
 
-**Poslední aktualizace:** 2026  
-**Verze:** 1.1.0
+**Poslední aktualizace:** březen 2026  
+**Verze:** 1.2.0

@@ -17,7 +17,7 @@ export function ContactForm() {
   if (!FORMSPREE_CONFIGURED) {
     return (
       <section id="kontakt-formular">
-        <GlassPanel className="mx-auto max-w-xl p-6">
+        <GlassPanel className="mx-auto max-w-xl p-6 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]">
           <p className="text-sm text-zinc-500">
             Formulář není nakonfigurován. Nastavte{" "}
             <code className="rounded-sm border border-white/10 bg-black/40 px-1.5 py-0.5 font-mono text-xs text-zinc-400">
@@ -45,17 +45,17 @@ export function ContactForm() {
 
   return (
     <section id="kontakt-formular" className="mx-auto max-w-xl pb-16">
-      <GlassPanel className="p-6 text-center md:p-8">
-        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-center">
-          <h2 className="lab-section-title m-0 text-xl font-bold text-white">
-            Napište mi
+      <GlassPanel className="p-6 text-center shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)] md:p-8">
+        <div className="mb-6 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+          <h2 className="m-0 text-center font-mono text-base font-bold uppercase tracking-[0.14em] text-white [text-shadow:0_0_20px_rgba(0,240,255,0.35)] md:text-lg">
+            [ SEND_MESSAGE ]
           </h2>
           {LINKEDIN_URL ? (
             <a
               href={LINKEDIN_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="vc-text-link font-mono text-sm"
+              className="inline-flex items-center justify-center rounded-sm border border-white/15 bg-black/30 px-3 py-2 font-mono text-sm text-[var(--ht-cyan)] transition-colors hover:border-cyan-500 hover:bg-cyan-500/10 hover:text-cyan-300"
               aria-label="LinkedIn profil"
             >
               LinkedIn →
@@ -126,8 +126,8 @@ export function ContactForm() {
           <input type="hidden" name="_subject" value="Nová zpráva z webu" />
 
           <div>
-            <label htmlFor="contact-name" className="vc-form-label">
-              Jméno <span className="vc-form-required">*</span>
+            <label htmlFor="contact-name" className="contact-lab-label">
+              Jméno <span className="contact-lab-required">*</span>
             </label>
             <input
               id="contact-name"
@@ -135,13 +135,13 @@ export function ContactForm() {
               name="name"
               required
               placeholder="Vaše jméno"
-              className="vc-form-input"
+              className="contact-lab-input"
             />
           </div>
 
           <div>
-            <label htmlFor="contact-email" className="vc-form-label">
-              Váš email <span className="vc-form-required">*</span>
+            <label htmlFor="contact-email" className="contact-lab-label">
+              Váš email <span className="contact-lab-required">*</span>
             </label>
             <input
               id="contact-email"
@@ -149,13 +149,13 @@ export function ContactForm() {
               name="email"
               required
               placeholder="vas@email.cz"
-              className="vc-form-input"
+              className="contact-lab-input"
             />
           </div>
 
           <div>
-            <label htmlFor="contact-message" className="vc-form-label">
-              Zpráva <span className="vc-form-required">*</span>
+            <label htmlFor="contact-message" className="contact-lab-label">
+              Zpráva <span className="contact-lab-required">*</span>
             </label>
             <textarea
               id="contact-message"
@@ -163,7 +163,7 @@ export function ContactForm() {
               required
               rows={5}
               placeholder="Co potřebujete? Napište mi..."
-              className="vc-form-input min-h-[120px] resize-y"
+              className="contact-lab-input contact-lab-textarea min-h-[120px] resize-y"
             />
           </div>
 
@@ -171,9 +171,9 @@ export function ContactForm() {
             type="button"
             disabled={sending}
             onClick={() => formRef.current?.requestSubmit()}
-            className="ht-cta w-full justify-center disabled:cursor-not-allowed disabled:opacity-60"
+            className="contact-lab-submit flex justify-center"
           >
-            {sending ? "Odesílám…" : "Odeslat"}
+            {sending ? "[ TRANSMITTING... ]" : "[ EXECUTE_SEND ]"}
           </button>
 
           <p
@@ -186,20 +186,9 @@ export function ContactForm() {
           </p>
         </form>
 
-        {LINKEDIN_URL ? (
-          <p className="mt-6 text-center text-sm text-zinc-600">
-            Případně napište na{" "}
-            <a
-              href={LINKEDIN_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="vc-text-link"
-            >
-              LinkedIn
-            </a>
-            .
-          </p>
-        ) : null}
+        <p className="mt-6 text-center font-mono text-[0.65rem] leading-relaxed tracking-wide text-zinc-500/45">
+          // secure_uplink_established // channel: encrypted
+        </p>
       </GlassPanel>
     </section>
   );

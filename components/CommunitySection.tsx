@@ -8,8 +8,8 @@ const LINKEDIN_URL =
 
 export function CommunitySection() {
   return (
-    <section className="mb-12">
-      <GlassPanel className="p-6 text-center md:p-10">
+    <section className="mb-14">
+      <GlassPanel className="p-6 text-center shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)] md:p-10">
         <p className="lab-eyebrow text-[#a855f7]/70">{"// community.signal"}</p>
         <h2 className="lab-section-title mt-3 text-xl font-bold text-white md:text-2xl">
           Komunita

@@ -2,7 +2,8 @@
 
 Moderní web pro Jdemevibit postavený s Next.js 16, TypeScript a Tailwind CSS.
 
-> 📖 **Kompletní technická dokumentace:** Viz [TECHNICKA_DOKUMENTACE.md](./TECHNICKA_DOKUMENTACE.md)
+> 📖 **Kompletní technická dokumentace:** Viz [TECHNICKA_DOKUMENTACE.md](./TECHNICKA_DOKUMENTACE.md)  
+> **Prompt Library (AI zadání):** [prompts.md](./prompts.md)
 
 ## 🚀 Rychlý start
 
