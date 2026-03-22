@@ -5,6 +5,7 @@ import "./globals.css";
 import { StructuredData } from "@/components/StructuredData";
 import { CookieConsent } from "@/components/CookieConsent";
 import GoogleAnalyticsWrapper from "@/components/GoogleAnalyticsWrapper";
+import { SiteFooter } from "@/components/SiteFooter";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -102,6 +103,7 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <StructuredData />
         {children}
+        <SiteFooter />
         <CookieConsent />
         <GoogleAnalyticsWrapper />
       </body>

@@ -21,7 +21,7 @@ export function StarterProjectsCTA() {
             <span>→</span>
           </Link>
           <Link
-            href="/navody"
+            href="/vault"
             className="px-8 py-4 bg-white/10 text-white rounded-lg font-semibold hover:bg-white/20 transition-colors border border-white/20"
           >
             Zobrazit návody

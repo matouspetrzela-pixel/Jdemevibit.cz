@@ -19,13 +19,13 @@ export function LabVaultSection() {
             už něco shipnuli.
           </p>
           <Link
-            href="/navody"
+            href="/vault"
             className="vc-vault-cta mt-10 inline-flex items-center gap-2 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-zinc-300"
           >
             Odemknout vault
             <span className="text-[#00f0ff]/50">→</span>
             <span className="normal-case tracking-normal text-zinc-600">
-              /navody
+              /vault
             </span>
           </Link>
         </div>

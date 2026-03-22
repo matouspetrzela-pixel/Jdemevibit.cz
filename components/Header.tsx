@@ -12,8 +12,10 @@ export function Header() {
   const active = (path: string) =>
     pathname === path ? "text-[#00f0ff]" : "";
 
-  const navodyActive =
-    pathname?.startsWith("/navody") || pathname?.startsWith("/nastroje")
+  const vaultActive =
+    pathname?.startsWith("/vault") ||
+    pathname?.startsWith("/navody") ||
+    pathname?.startsWith("/nastroje")
       ? "text-[#00f0ff]"
       : "";
 
@@ -36,7 +38,7 @@ export function Header() {
               </Link>
             </li>
             <li>
-              <Link href="/navody" className={`${linkBase} ${navodyActive}`}>
+              <Link href="/vault" className={`${linkBase} ${vaultActive}`}>
                 [THE VAULT]
               </Link>
             </li>
