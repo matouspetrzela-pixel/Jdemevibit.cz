@@ -29,8 +29,8 @@ export function Header() {
             </li>
             <li>
               <Link
-                href="/use-cases"
-                className={`${linkBase} ${active("/use-cases")}`}
+                href="/projekty"
+                className={`${linkBase} ${active("/projekty")}`}
               >
                 USE CASES
               </Link>

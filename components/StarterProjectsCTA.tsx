@@ -14,7 +14,7 @@ export function StarterProjectsCTA() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-4">
           <Link
-            href="/use-cases"
+            href="/projekty"
             className="px-8 py-4 bg-[#ef2c28] text-white rounded-lg font-semibold hover:bg-[#ff3d35] transition-colors inline-flex items-center gap-2"
           >
             Prozkoumat projekty

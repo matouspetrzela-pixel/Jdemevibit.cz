@@ -815,3 +815,13 @@ img[loading="lazy"].loaded {
 .vc-btn-ghost:hover {
   color: #f4f4f5;
 }
+
+/* —— /projekty Archive .LOG — světlé assety (SVG / bílé mockupy) na černém podkladu —— */
+.archive-module__img--light {
+  mix-blend-mode: screen;
+  opacity: 0.92;
+}
+
+.group:hover .archive-module__img--light {
+  opacity: 1;
+}
