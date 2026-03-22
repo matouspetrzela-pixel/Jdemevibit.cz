@@ -7,18 +7,35 @@ import { usePathname } from "next/navigation";
 const linkBase =
   "font-mono text-xs uppercase tracking-[0.18em] text-zinc-500 transition-colors duration-200 hover:text-[#00f0ff]";
 
+function scrollToTopIfSamePage(
+  e: MouseEvent<HTMLAnchorElement>,
+  sameRoute: boolean
+) {
+  if (!sameRoute) return;
+  e.preventDefault();
+  const instant = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+  window.scrollTo({ top: 0, behavior: instant ? "auto" : "smooth" });
+}
+
 export function Header() {
   const pathname = usePathname();
 
-  /** Na úvodní stránce stejný odkaz = scroll nahoru (Next na / → / nescrolluje). */
-  const handleLabClick = (e: MouseEvent<HTMLAnchorElement>) => {
-    if (pathname !== "/") return;
-    e.preventDefault();
-    const instant = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    window.scrollTo({ top: 0, behavior: instant ? "auto" : "smooth" });
-  };
+  const onLab = (e: MouseEvent<HTMLAnchorElement>) =>
+    scrollToTopIfSamePage(e, pathname === "/");
+
+  const onProjekty = (e: MouseEvent<HTMLAnchorElement>) =>
+    scrollToTopIfSamePage(e, pathname === "/projekty");
+
+  const onVault = (e: MouseEvent<HTMLAnchorElement>) =>
+    scrollToTopIfSamePage(e, pathname === "/vault");
+
+  const onOMne = (e: MouseEvent<HTMLAnchorElement>) =>
+    scrollToTopIfSamePage(e, pathname === "/o-mne");
+
+  const onKontakt = (e: MouseEvent<HTMLAnchorElement>) =>
+    scrollToTopIfSamePage(e, pathname === "/kontakt");
 
   const active = (path: string) =>
     pathname === path ? "text-[#00f0ff]" : "";
@@ -39,7 +56,7 @@ export function Header() {
               <Link
                 href="/"
                 className={`${linkBase} ${active("/")}`}
-                onClick={handleLabClick}
+                onClick={onLab}
                 aria-label={
                   pathname === "/"
                     ? "Laboratoř — zpět na začátek stránky"
@@ -53,17 +70,41 @@ export function Header() {
               <Link
                 href="/projekty"
                 className={`${linkBase} ${active("/projekty")}`}
+                onClick={onProjekty}
+                aria-label={
+                  pathname === "/projekty"
+                    ? "Use Cases — zpět na začátek stránky"
+                    : "Use Cases — archiv projektů"
+                }
               >
                 USE CASES
               </Link>
             </li>
             <li>
-              <Link href="/vault" className={`${linkBase} ${vaultActive}`}>
+              <Link
+                href="/vault"
+                className={`${linkBase} ${vaultActive}`}
+                onClick={onVault}
+                aria-label={
+                  pathname === "/vault"
+                    ? "The Vault — zpět na začátek stránky"
+                    : "The Vault — protokoly"
+                }
+              >
                 [THE VAULT]
               </Link>
             </li>
             <li>
-              <Link href="/o-mne" className={`${linkBase} ${active("/o-mne")}`}>
+              <Link
+                href="/o-mne"
+                className={`${linkBase} ${active("/o-mne")}`}
+                onClick={onOMne}
+                aria-label={
+                  pathname === "/o-mne"
+                    ? "O mně — zpět na začátek stránky"
+                    : "O mně"
+                }
+              >
                 O MNĚ
               </Link>
             </li>
@@ -71,6 +112,12 @@ export function Header() {
               <Link
                 href="/kontakt"
                 className={`${linkBase} ${active("/kontakt")}`}
+                onClick={onKontakt}
+                aria-label={
+                  pathname === "/kontakt"
+                    ? "Kontakt — zpět na začátek stránky"
+                    : "Kontakt"
+                }
               >
                 KONTAKT
               </Link>
