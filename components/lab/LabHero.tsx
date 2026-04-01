@@ -31,9 +31,22 @@ export function LabHero() {
           </p>
 
           <div className="mt-10 flex flex-col items-center gap-4 lg:items-start">
-            <Link href="/kontakt" className="ht-cta">
-              VSTUP DO LABORATOŘE [SOUKROMÉ]
-            </Link>
+            <div className="flex flex-col items-center gap-3 sm:flex-row lg:items-start">
+              <Link href="/projekty" className="ht-cta">
+                OTEVŘÍT ARCHIV PROJEKTŮ
+              </Link>
+              <Link
+                href="/kontakt"
+                className="inline-flex items-center gap-2 rounded-sm border border-white/[0.1] bg-black/30 px-5 py-3 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-zinc-300 transition-colors duration-200 hover:border-[#00f0ff]/30 hover:text-[#00f0ff]"
+              >
+                VSTUP DO LABORATOŘE
+                <span className="text-[#00f0ff]/50">/kontakt</span>
+              </Link>
+            </div>
+            <p className="max-w-lg font-mono text-[0.72rem] leading-relaxed text-zinc-500/75">
+              Konkrétní buildy, stack a use cases najdeš nejrychleji v archivu
+              projektů. Kontakt je až další vrstva.
+            </p>
             <p className="lab-eyebrow max-w-md text-left leading-relaxed text-zinc-500/60">
               {
                 "// pamatuj, ne všechno, co svítí, je kód. kvalita > počet followerů."

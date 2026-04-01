@@ -18,6 +18,16 @@ export function LabVaultSection() {
             Knihovna workflow, které jinde nekoupíš. Přístup pouze pro ty, kteří
             už něco shipnuli.
           </p>
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-zinc-400">
+            Nejdřív si projdi{" "}
+            <Link
+              href="/projekty"
+              className="text-[#00f0ff] underline decoration-[#00f0ff]/25 underline-offset-2 transition-colors hover:decoration-[#00f0ff]"
+            >
+              archiv projektů
+            </Link>
+            . Vault je vrstva navíc, ne náhrada za důkaz reálné práce.
+          </p>
           <Link
             href="/vault"
             className="vc-vault-cta mt-10 inline-flex items-center gap-2 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-zinc-300"

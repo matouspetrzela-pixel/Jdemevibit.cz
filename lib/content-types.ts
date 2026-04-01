@@ -1,7 +1,5 @@
-// Datový model pro programmatic SEO
-// Use cases, návody, nástroje
-
 import { getProjects, type Project } from "./projects";
+import { NASTROJE_CONTENT } from "./nastroje-content";
 
 export type ContentCategory = "use-case" | "navod" | "nastroj";
 
@@ -101,7 +99,7 @@ export function getAllContent(): Content[] {
     };
   });
 
-  return useCases;
+  return [...useCases, ...NASTROJE_CONTENT];
 }
 
 // Helper pro získání content podle slug

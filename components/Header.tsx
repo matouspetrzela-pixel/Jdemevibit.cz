@@ -73,11 +73,11 @@ export function Header() {
                 onClick={onProjekty}
                 aria-label={
                   pathname === "/projekty"
-                    ? "Use Cases — zpět na začátek stránky"
-                    : "Use Cases — archiv projektů"
+                    ? "Projekty — zpět na začátek stránky"
+                    : "Projekty — archiv projektů"
                 }
               >
-                USE CASES
+                PROJEKTY
               </Link>
             </li>
             <li>
