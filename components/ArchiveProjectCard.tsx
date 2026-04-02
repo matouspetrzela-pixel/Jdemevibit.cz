@@ -21,9 +21,10 @@ export function ArchiveProjectCard({ project, onOpen }: ArchiveProjectCardProps)
   const summary = getArchiveSummary(project);
   const linkUrl = getProjectLinkUrl(project);
   const techLine = project.technologies.join(" · ");
-  const isLightAsset =
-    project.id === "3" ||
-    (project.image?.toLowerCase().endsWith(".svg") ?? false);
+  /** Jen světlé PNG mockupy (screen blend). SVG mají vlastní jemný styl bez mix-blend. */
+  const isLightAsset = project.id === "3";
+  const isVectorDark =
+    (project.image?.toLowerCase().endsWith(".svg") ?? false) && !isLightAsset;
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Enter" || e.key === " ") {
@@ -63,7 +64,9 @@ export function ArchiveProjectCard({ project, onOpen }: ArchiveProjectCardProps)
               className={`archive-module__img max-h-full max-w-full object-contain transition-[filter,opacity] duration-500 ease-out ${
                 isLightAsset
                   ? "archive-module__img--light"
-                  : "brightness-[0.5] contrast-[1.2] grayscale-[0.2] group-hover:brightness-100 group-hover:grayscale-0 group-hover:contrast-100"
+                  : isVectorDark
+                    ? "archive-module__img--vector-dark"
+                    : "brightness-[0.5] contrast-[1.2] grayscale-[0.2] group-hover:brightness-100 group-hover:grayscale-0 group-hover:contrast-100"
               }`}
             />
           ) : (

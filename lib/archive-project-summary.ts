@@ -8,6 +8,8 @@ const BY_ID: Record<string, string> = {
   "4": "Enterprise AI v praxi. Dekonstrukce dat v reálném čase.",
   "5": "Minimalistické stopky pro deep work seance.",
   "6": "Architektura pozornosti. Eventy pod kontrolou.",
+  "12": "SaaS náklady na jedné obrazovce. Data anonymizovaná.",
+  "13": "Podpis do mailu: formulář, náhled, HTML ven.",
 };
 
 function truncateWords(text: string, maxWords: number): string {
