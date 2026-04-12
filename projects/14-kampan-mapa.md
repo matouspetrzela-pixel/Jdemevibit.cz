@@ -1,5 +1,5 @@
 ---
-id: "15"
+id: "14"
 title: "Mapa pokrytí (kampaň)"
 description: "Interaktivní mapa ulic: OSM trasy, barvy podle přiřazení, panel pro zaměření ulice."
 strapline: "Next.js · Supabase · Leaflet · OSM trasy"
