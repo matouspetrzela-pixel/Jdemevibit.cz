@@ -543,7 +543,7 @@ interface UseCase extends BaseContent {
 **Umístění:**
 - **Markdown:** `projects/*.md` – každý projekt jeden soubor (např. `10-popelnice-pripominky-svozu-poplatku.md`).
 - **Obrázky (volitelně):** `public/projects/` – náhledy ve formátu PNG nebo SVG. Cesta v frontmatter: `image: "/projects/<id>-<nazev>.png"`. Bez `image` se v modalu nezobrazuje náhled.
-- **Načítání:** `lib/projects.ts` – funkce `getProjects()` čte všechny `.md` v `projects/`, parsuje frontmatter (gray-matter) a tělo jako `fullDescription`. Projekty se řadí podle číselného `id`.
+- **Načítání:** `lib/projects.ts` – funkce `getProjects()` čte všechny `.md` v `projects/`, parsuje frontmatter (gray-matter) a tělo jako `fullDescription`. Projekty se řadí **rostoucím číselným `id`** (časový otisk — novější moduly mají vyšší id a zobrazí se dole v mřížce).
 
 **Frontmatter projektu:**
 - **Povinná pole:** `id`, `title`, `description`, `technologies`, `timeSpent`, `status`, `category`

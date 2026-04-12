@@ -1,7 +1,6 @@
 ---
 id: "14"
 title: "RAG Document Chat"
-highlightOrder: 1
 description: "Chat nad vlastními dokumenty. Odpovědi berou text z repo složky docs/ a ukazují zdroje."
 strapline: "Next.js · hybridní RAG · Google Gemini · Vercel Blob"
 technologies:

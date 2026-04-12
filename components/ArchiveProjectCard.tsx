@@ -22,7 +22,8 @@ export function ArchiveProjectCard({ project, onOpen }: ArchiveProjectCardProps)
   const linkUrl = getProjectLinkUrl(project);
   const techLine = project.technologies.join(" · ");
   /** Jen světlé PNG mockupy (screen blend). SVG mají vlastní jemný styl bez mix-blend. */
-  const isLightAsset = project.id === "3" || project.id === "14";
+  const isLightAsset =
+    project.id === "3" || project.id === "14" || project.id === "15";
   const isVectorDark =
     (project.image?.toLowerCase().endsWith(".svg") ?? false) && !isLightAsset;
 

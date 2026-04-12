@@ -1,7 +1,6 @@
 ---
 id: "15"
 title: "Mapa pokrytí (kampaň)"
-highlightOrder: 2
 description: "Interaktivní mapa ulic: OSM trasy, barvy podle přiřazení, panel pro zaměření ulice."
 strapline: "Next.js · Supabase · Leaflet · OSM trasy"
 technologies:
@@ -12,7 +11,7 @@ technologies:
 timeSpent: "2026"
 status: "PROTOTYP"
 category: "WEB"
-image: "/projects/kampan-mapa.svg"
+image: "/projects/kampan-mapa.png"
 businessBenefit: "Přehled pokrytí kampaně v ulicích: kdo kam chodí, bez tabulek — přímo na mapě."
 ---
 
