@@ -17,6 +17,10 @@ export interface Project {
   urlLocal?: string;
   image?: string; // Cesta k screenshotu
   businessBenefit?: string; // Business přínos projektu
+  /** Nižší číslo = dříve v mřížce (např. 1 = první sloupec, 2 = druhý). */
+  highlightOrder?: number;
+  /** Druhý krátký řádek na kartě archivu (silný doprovodný text). */
+  strapline?: string;
 }
 
 interface MarkdownFrontmatter {
@@ -32,6 +36,8 @@ interface MarkdownFrontmatter {
   url?: string;
   urlLocal?: string;
   businessBenefit?: string;
+  highlightOrder?: number;
+  strapline?: string;
 }
 
 // Načtení projektů z markdown souborů
@@ -99,6 +105,8 @@ function loadProjectsFromPath(projectsDir: string): Project[] {
             urlLocal: frontmatter.urlLocal,
             image: frontmatter.image,
             businessBenefit: frontmatter.businessBenefit,
+            highlightOrder: frontmatter.highlightOrder,
+            strapline: frontmatter.strapline,
           };
 
           return project;
@@ -109,9 +117,11 @@ function loadProjectsFromPath(projectsDir: string): Project[] {
       })
       .filter((project): project is Project => project !== null)
       .sort((a, b) => {
-        // Seřazení podle ID (číslo v názvu souboru)
-        const aId = parseInt(a.id) || 0;
-        const bId = parseInt(b.id) || 0;
+        const ho =
+          (a.highlightOrder ?? 999) - (b.highlightOrder ?? 999);
+        if (ho !== 0) return ho;
+        const aId = parseInt(a.id, 10) || 0;
+        const bId = parseInt(b.id, 10) || 0;
         return aId - bId;
       });
 

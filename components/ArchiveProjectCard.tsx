@@ -22,7 +22,7 @@ export function ArchiveProjectCard({ project, onOpen }: ArchiveProjectCardProps)
   const linkUrl = getProjectLinkUrl(project);
   const techLine = project.technologies.join(" · ");
   /** Jen světlé PNG mockupy (screen blend). SVG mají vlastní jemný styl bez mix-blend. */
-  const isLightAsset = project.id === "3";
+  const isLightAsset = project.id === "3" || project.id === "14";
   const isVectorDark =
     (project.image?.toLowerCase().endsWith(".svg") ?? false) && !isLightAsset;
 
@@ -103,6 +103,12 @@ export function ArchiveProjectCard({ project, onOpen }: ArchiveProjectCardProps)
         <p className="flex-1 text-sm leading-relaxed text-zinc-500">
           {summary}
         </p>
+
+        {project.strapline ? (
+          <p className="text-xs font-medium leading-snug tracking-wide text-zinc-400/90">
+            {project.strapline}
+          </p>
+        ) : null}
 
         {techLine ? (
           <p className="font-mono text-[0.68rem] leading-snug text-white/[0.3] transition-colors duration-500 ease-out group-hover:text-[#00f0ff]/85">
