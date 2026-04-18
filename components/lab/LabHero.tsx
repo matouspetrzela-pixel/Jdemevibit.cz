@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { LabHeroPlexus } from "./LabHeroPlexus";
 import { LabLogo } from "./LabLogo";
 import { LabTerminal } from "./LabTerminal";
 
 export function LabHero() {
   return (
     <section className="lab-hero relative min-h-[min(100vh,980px)]">
+      <LabHeroPlexus />
       <div className="vc-glow vc-glow--cyan" aria-hidden />
       <div className="vc-glow vc-glow--violet" aria-hidden />
       <div className="ht-scanlines opacity-[0.06]" aria-hidden />

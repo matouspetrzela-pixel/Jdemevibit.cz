@@ -47,6 +47,10 @@ html {
     animation: none !important;
   }
 
+  .lab-hero-plexus__canvas {
+    opacity: 0.55 !important;
+  }
+
   .vc-card-inner {
     transition: none !important;
   }
@@ -285,6 +289,33 @@ img[loading="lazy"].loaded {
   overflow: hidden;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   background: #000000;
+}
+
+/* Hero plexus: sits under glows/scanlines, soft vignette so edges stay clean */
+.lab-hero-plexus {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(
+    ellipse 92% 78% at 50% 38%,
+    #000 0%,
+    rgba(0, 0, 0, 0.55) 55%,
+    transparent 82%
+  );
+  mask-image: radial-gradient(
+    ellipse 92% 78% at 50% 38%,
+    #000 0%,
+    rgba(0, 0, 0, 0.55) 55%,
+    transparent 82%
+  );
+}
+
+.lab-hero-plexus__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0.72;
 }
 
 .vc-glow {
