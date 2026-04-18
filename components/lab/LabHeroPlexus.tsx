@@ -12,8 +12,11 @@ export function LabHeroPlexus() {
     const parent = canvas.parentElement;
     if (!parent) return;
 
-    const ctx = canvas.getContext("2d", { alpha: true });
-    if (!ctx) return;
+    const maybeCtx = canvas.getContext("2d", { alpha: true });
+    if (!maybeCtx || !(maybeCtx instanceof CanvasRenderingContext2D)) {
+      return;
+    }
+    const gCtx: CanvasRenderingContext2D = maybeCtx;
 
     let reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -69,6 +72,7 @@ export function LabHeroPlexus() {
     }
 
     function resize() {
+      if (!canvas || !parent) return;
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       width = parent.clientWidth;
       height = parent.clientHeight;
@@ -77,7 +81,7 @@ export function LabHeroPlexus() {
       canvas.height = Math.floor(height * dpr);
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      gCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
       spawn();
       if (reduced) {
         cancelAnimationFrame(raf);
@@ -112,9 +116,9 @@ export function LabHeroPlexus() {
     function draw() {
       const maxD = linkRadius();
       const maxD2 = maxD * maxD;
-      ctx.clearRect(0, 0, width, height);
-      ctx.lineWidth = 0.6;
-      ctx.lineCap = "round";
+      gCtx.clearRect(0, 0, width, height);
+      gCtx.lineWidth = 0.6;
+      gCtx.lineCap = "round";
 
       const cx = width * 0.7;
       const cy = height * 0.38;
@@ -136,23 +140,23 @@ export function LabHeroPlexus() {
           const baseA = falloff * 0.078 * towardTerminal;
           const violetLine = a.violet && b.violet;
           if (violetLine) {
-            ctx.strokeStyle = `rgba(168, 85, 247, ${baseA * 0.95})`;
+            gCtx.strokeStyle = `rgba(168, 85, 247, ${baseA * 0.95})`;
           } else {
-            ctx.strokeStyle = `rgba(0, 240, 255, ${baseA * 0.85})`;
+            gCtx.strokeStyle = `rgba(0, 240, 255, ${baseA * 0.85})`;
           }
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(b.x, b.y);
-          ctx.stroke();
+          gCtx.beginPath();
+          gCtx.moveTo(a.x, a.y);
+          gCtx.lineTo(b.x, b.y);
+          gCtx.stroke();
         }
       }
 
       for (const n of nodes) {
         const g = n.violet ? "168, 85, 247" : "0, 240, 255";
-        ctx.fillStyle = `rgba(${g}, ${n.violet ? 0.2 : 0.16})`;
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fill();
+        gCtx.fillStyle = `rgba(${g}, ${n.violet ? 0.2 : 0.16})`;
+        gCtx.beginPath();
+        gCtx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        gCtx.fill();
       }
     }
 

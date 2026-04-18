@@ -91,6 +91,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: siteOrigin,
   },
+  icons: {
+    icon: [{ url: "/icon", type: "image/png", sizes: "96x96" }],
+    apple: [{ url: "/apple-icon", type: "image/png", sizes: "180x180" }],
+  },
 };
 
 export default function RootLayout({
