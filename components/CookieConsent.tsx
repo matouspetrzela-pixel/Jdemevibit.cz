@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 
+const cookieBtnClass =
+  "rounded border border-zinc-400/30 bg-white/85 px-4 py-2 text-[0.975rem] font-normal leading-tight text-zinc-600 transition-colors hover:border-zinc-400/45 hover:bg-white/95 hover:text-zinc-800";
+
 export function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false);
 
@@ -31,25 +34,25 @@ export function CookieConsent() {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-[80] border-t border-white/[0.1] bg-black/85 p-4 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-6xl flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="flex-1 text-sm text-zinc-400">
+      <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-4 px-5 text-center md:flex-row md:justify-center md:gap-5">
+        <p className="text-[0.9625rem] leading-relaxed text-zinc-400">
           Tento web používá cookies pro analýzu návštěvnosti.{" "}
           <a href="/o-mne" className="vc-text-link">
             Více informací
           </a>
         </p>
-        <div className="flex shrink-0 gap-3">
+        <div className="flex shrink-0 justify-center gap-2.5">
           <button
             type="button"
             onClick={rejectCookies}
-            className="vc-btn-ghost rounded-sm px-4 py-2"
+            className={cookieBtnClass}
           >
             Odmítnout
           </button>
           <button
             type="button"
             onClick={acceptCookies}
-            className="vc-btn-primary rounded-sm px-6 py-2 text-sm"
+            className={cookieBtnClass}
           >
             Přijmout
           </button>
